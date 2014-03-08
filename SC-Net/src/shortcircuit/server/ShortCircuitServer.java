@@ -8,6 +8,7 @@ import shortcircuit.shared.Simulator;
 
 public class ShortCircuitServer {
 
+    private static Authenticator authenticator;
     private static Room lobby;
     private static Hashtable<String, Room> roomList;
     private static boolean listening;
@@ -22,7 +23,9 @@ public class ShortCircuitServer {
 	ShortCircuitServer.roomList = new Hashtable<String, Room>();
 
 	ShortCircuitServer.sim = new Simulator(0, 0, null);
-
+	ShortCircuitServer.authenticator = new Authenticator();
+	ShortCircuitServer.authenticator.create();
+	
 	try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
 	    ShortCircuitServerThread incomingClient;
 	    while (listening) {
@@ -48,6 +51,10 @@ public class ShortCircuitServer {
 	return roomList.get(key);
     }
 
+    public static Authenticator getAuthenticator() {
+	return authenticator;
+    }
+    
     public static Room createRoom(String roomName, Client admin) {
 	Room room = new Room(roomName, admin);
 	roomList.put(roomName, room);

@@ -2,6 +2,8 @@ package shortcircuit.server;
 
 import java.util.Hashtable;
 
+import shortcircuit.shared.Command;
+
 public class Room {
     private Client admin;
     private Hashtable<String, Client> members;

@@ -3,7 +3,6 @@ package shortcircuit.shared;
 import java.util.ArrayList;
 
 import shortcircuit.server.Client;
-import shortcircuit.server.Command;
 
 public class Simulator {
 

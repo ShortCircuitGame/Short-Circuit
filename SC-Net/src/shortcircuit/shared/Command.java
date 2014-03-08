@@ -1,8 +1,8 @@
-package shortcircuit.server;
+package shortcircuit.shared;
 public class Command {
 
 	public static enum CommandType {
-		CREATE, JOIN, OTHERJOIN, ROOMS, USERS, LEAVE, DISCONNECT, CHAT, START, STOP, NONE, SUCCESS, FAILURE
+		CREATE, JOIN, OTHERJOIN, ROOMS, USERS, LEAVE, DISCONNECT, CHAT, START, STOP, NONE, SUCCESS, FAILURE, USERNAME, PASSWORD, SIGNUP, SIGNIN
 	};
 
 	public static final String delimiter = "/";

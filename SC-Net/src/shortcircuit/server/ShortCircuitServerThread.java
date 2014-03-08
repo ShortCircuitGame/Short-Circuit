@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import shortcircuit.shared.Command;
+import shortcircuit.shared.Command.CommandType;
+
 public class ShortCircuitServerThread extends Thread {
     private Socket socket;
     private Client client;
@@ -32,9 +35,31 @@ public class ShortCircuitServerThread extends Thread {
 	    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 	    String inputLine;
-	    while (this.isRunning && (inputLine = in.readLine()) != null) {
-		Command command = new Command(inputLine);
-		client.executeCommand(command);
+
+	    Command initial = new Command(in.readLine());
+	    Command username = new Command(in.readLine());
+	    Command password = new Command(in.readLine());
+
+	    if (username.command == Command.CommandType.USERNAME && password.command == CommandType.PASSWORD) {
+		boolean allowed;
+		if (initial.command == Command.CommandType.SIGNUP) {
+		    allowed = ShortCircuitServer.getAuthenticator().addUser(username.message, password.message);
+		} else if (initial.command == Command.CommandType.SIGNIN) {
+		    allowed = ShortCircuitServer.getAuthenticator().authorize(username.message, password.message);
+		} else {
+		    allowed = false;
+		}
+		if (allowed) {
+
+		    while (this.isRunning && (inputLine = in.readLine()) != null) {
+			Command command = new Command(inputLine);
+			client.executeCommand(command);
+		    }
+		} else {
+		    System.out.println("Not authorized");
+		}
+	    } else {
+		System.out.println("Authentication information not provided");
 	    }
 	    System.out.println("Client thread stopping");
 	    socket.close();

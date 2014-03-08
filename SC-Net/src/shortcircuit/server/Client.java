@@ -2,6 +2,8 @@ package shortcircuit.server;
 
 import java.util.UUID;
 
+import shortcircuit.shared.Command;
+
 public class Client {
     private ShortCircuitServerThread thread;
     private String username;
