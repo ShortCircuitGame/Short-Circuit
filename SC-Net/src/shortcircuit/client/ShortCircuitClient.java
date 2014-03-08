@@ -16,6 +16,7 @@ public class ShortCircuitClient extends Thread {
     private PrintWriter out;
 
     public ShortCircuitClient() {
+	ShortCircuitClient.sim = new Simulator(0, 0, null);
 
     }
 
@@ -23,9 +24,9 @@ public class ShortCircuitClient extends Thread {
 	String hostName = "localhost";
 	int portNumber = 8970;
 
-	try (Socket kkSocket = new Socket(hostName, portNumber);
-		PrintWriter out = new PrintWriter(kkSocket.getOutputStream(), true);
-		BufferedReader in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));) {
+	try (Socket socket = new Socket(hostName, portNumber);
+		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+		BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));) {
 	    String fromServer;
 
 	    this.out = out;
@@ -41,7 +42,7 @@ public class ShortCircuitClient extends Thread {
 	}
     }
 
-    public void sendMessage(Command command){
+    public void sendMessage(Command command) {
 	this.out.println(command.toString());
     }
 
@@ -53,5 +54,6 @@ public class ShortCircuitClient extends Thread {
 	while ((input = stdIn.readLine()) != null) {
 	    client.sendMessage(new Command(input));
 	}
+	stdIn.close();
     }
 }

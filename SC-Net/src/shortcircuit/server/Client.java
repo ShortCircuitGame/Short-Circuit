@@ -35,6 +35,7 @@ public class Client {
 		this.thread.getRoom().addMember(this);
 		this.thread.getRoom().broadcastCommand(command);
 		sendCommand(new Command(Command.CommandType.JOIN, command.message));
+		this.thread.getRoom().broadcastCommand(new Command(Command.CommandType.OTHERJOIN, command.message), this);
 	    } else {
 		System.out.println("You are already in a room");
 		sendCommand(new Command(Command.CommandType.FAILURE, "You are already in a room"));
@@ -46,6 +47,7 @@ public class Client {
 		this.thread.setRoom(ShortCircuitServer.getRoom(command.message));
 		this.thread.getRoom().addMember(this);
 		sendCommand(new Command(Command.CommandType.JOIN, command.message));
+		this.thread.getRoom().broadcastCommand(new Command(Command.CommandType.OTHERJOIN, command.message), this);
 	    } else {
 		System.out.println("You are already in a room");
 		sendCommand(new Command(Command.CommandType.FAILURE, "You are already in a room"));

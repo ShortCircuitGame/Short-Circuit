@@ -30,8 +30,14 @@ public class Room {
     }
 
     public void broadcastCommand(Command command) {
+	broadcastCommand(command, null);
+    }
+
+    public void broadcastCommand(Command command, Client client) {
 	for (String key : members.keySet()) {
-	    members.get(key).sendCommand(command);
+	    if (members.get(key) == client) {
+		members.get(key).sendCommand(command);
+	    }
 	}
     }
 

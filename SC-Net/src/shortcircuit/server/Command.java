@@ -2,7 +2,7 @@ package shortcircuit.server;
 public class Command {
 
 	public static enum CommandType {
-		CREATE, JOIN, ROOMS, USERS, LEAVE, DISCONNECT, CHAT, START, STOP, NONE, SUCCESS, FAILURE
+		CREATE, JOIN, OTHERJOIN, ROOMS, USERS, LEAVE, DISCONNECT, CHAT, START, STOP, NONE, SUCCESS, FAILURE
 	};
 
 	public static final String delimiter = "/";
