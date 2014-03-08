@@ -1,3 +1,4 @@
+package shortcircuit.server;
 public class Command {
 
 	public static enum CommandType {
@@ -20,7 +21,7 @@ public class Command {
 		} catch (ArrayIndexOutOfBoundsException ex) {
 			this.command = CommandType.NONE;
 			this.message = "DELIMITERNOTFOUND";
-			System.err.println("Command recieved did not have a valid delimiter");
+			System.err.println("Command recieved is not correctly formatted");
 		}
 	}
 	
