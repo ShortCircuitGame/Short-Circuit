@@ -16,6 +16,7 @@ public class Authenticator {
 	    connection = DriverManager.getConnection("jdbc:sqlite:users.db");
 	    connection.setAutoCommit(false);
 	} catch (Exception e) {
+	    e.printStackTrace();
 	    System.err.println(e.getClass().getName() + ": " + e.getMessage());
 	}
 	System.out.println("Opened database successfully");
@@ -25,11 +26,12 @@ public class Authenticator {
 	Statement stmt;
 	try {
 	    stmt = connection.createStatement();
-	    String sql = "CREATE TABLE COMPANY " + "(USERNAME TEXT PRIMARY KEY NOT NULL, " + " PASSWORD TEXT NOT NULL, " + " WINS INT NOT NULL, "
-		    + " LOSSES INT NOT NULL";
+	    String sql = "CREATE TABLE IF NOT EXISTS COMPANY " + "(USERNAME TEXT PRIMARY KEY NOT NULL, " + " PASSWORD TEXT NOT NULL, " + " WINS INT NOT NULL, "
+		    + " LOSSES INT NOT NULL);";
 	    stmt.executeUpdate(sql);
 	    stmt.close();
 	} catch (SQLException e) {
+	    e.printStackTrace();
 	    System.err.println(e.getClass().getName() + ": " + e.getMessage());
 	}
     }
@@ -43,6 +45,7 @@ public class Authenticator {
 	    stmt.close();
 	    connection.commit();
 	} catch (Exception e) {
+	    e.printStackTrace();
 	    System.err.println(e.getClass().getName() + ": " + e.getMessage());
 	    return false;
 	}
@@ -55,13 +58,14 @@ public class Authenticator {
 	int results = 0;
 	try {
 	    stmt = connection.createStatement();
-	    ResultSet rs = stmt.executeQuery("SELECT * FROM COMPANY WHERE USERNAME=" + username + " AND PASSWORD=" + password + ";");
+	    ResultSet rs = stmt.executeQuery("SELECT * FROM COMPANY WHERE USERNAME = '" + username + "' AND PASSWORD = '" + password + "' ;");
 	    while (rs.next()) {
 		results++;
 	    }
 	    rs.close();
 	    stmt.close();
 	} catch (Exception e) {
+	    e.printStackTrace();
 	    System.err.println(e.getClass().getName() + ": " + e.getMessage());
 	    return false;
 	}
@@ -78,7 +82,7 @@ public class Authenticator {
 	User user = null;
 	try {
 	    stmt = connection.createStatement();
-	    ResultSet rs = stmt.executeQuery("SELECT * FROM COMPANY WHERE USERNAME=" + username + ";");
+	    ResultSet rs = stmt.executeQuery("SELECT * FROM COMPANY WHERE USERNAME = " + username + ";");
 	    while (rs.next()) {
 		int wins = rs.getInt("wins");
 		int losses = rs.getInt("losses");
@@ -87,6 +91,7 @@ public class Authenticator {
 	    rs.close();
 	    stmt.close();
 	} catch (Exception e) {
+	    e.printStackTrace();
 	    System.err.println(e.getClass().getName() + ": " + e.getMessage());
 	    return null;
 	}
@@ -103,6 +108,7 @@ public class Authenticator {
 	    connection.commit();
 	    stmt.close();
 	} catch (Exception e) {
+	    e.printStackTrace();
 	    System.err.println(e.getClass().getName() + ": " + e.getMessage());
 	    return false;
 	}

@@ -6,18 +6,20 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import shortcircuit.shared.Command;
 import shortcircuit.shared.Simulator;
 
 public class ShortCircuitClient extends Thread {
 
-    private static Simulator sim;
+    private Simulator sim;
     private PrintWriter out;
+    private ArrayList<ClientEventListener> listeners;
 
     public ShortCircuitClient() {
-	ShortCircuitClient.sim = new Simulator(0, 0, null);
-
+	this.sim = new Simulator(0, 0, null);
+	this.listeners = new ArrayList<ClientEventListener>();
     }
 
     public void run() {
@@ -30,15 +32,17 @@ public class ShortCircuitClient extends Thread {
 	    String fromServer;
 
 	    this.out = out;
+	    Command command;
 	    while ((fromServer = in.readLine()) != null) {
+		command = new Command(fromServer);
 		System.out.println(fromServer);
+		notifyListeners(command);
+
 	    }
 	} catch (UnknownHostException e) {
 	    System.err.println("Don't know about host " + hostName);
-	    System.exit(1);
 	} catch (IOException e) {
 	    System.err.println("Couldn't get I/O for the connection to " + hostName);
-	    System.exit(1);
 	}
     }
 
@@ -46,14 +50,19 @@ public class ShortCircuitClient extends Thread {
 	this.out.println(command.toString());
     }
 
-    public static void main(String[] args) throws IOException {
-	BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-	String input;
-	ShortCircuitClient client = new ShortCircuitClient();
-	client.start();
-	while ((input = stdIn.readLine()) != null) {
-	    client.sendMessage(new Command(input));
+    private void notifyListeners(Command command) {
+	for (ClientEventListener listener : listeners) {
+	    listener.commandRecievedEvent(command);
 	}
-	stdIn.close();
+    }
+
+    public void addListener(ClientEventListener listener) {
+	if (!listeners.contains(listener)) {
+	    listeners.add(listener);
+	}
+    }
+
+    public void removeListenet(ClientEventListener listener) {
+	listeners.remove(listener);
     }
 }

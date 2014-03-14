@@ -21,12 +21,9 @@ public class ShortCircuitServerThread extends Thread {
     public ShortCircuitServerThread(Socket socket) {
 	super("KKMultiServerThread");
 	this.socket = socket;
-	this.client = new Client(this);
     }
 
     public void run() {
-	this.setRoom(ShortCircuitServer.getGetLobby());
-	this.getRoom().addMember(this.client);
 	this.isRunning = true;
 	System.out.println("New client thread started");
 	try {
@@ -50,16 +47,23 @@ public class ShortCircuitServerThread extends Thread {
 		    allowed = false;
 		}
 		if (allowed) {
+		    this.client = new Client(this, username.message);
+		    this.setRoom(ShortCircuitServer.getGetLobby());
+		    this.getRoom().addMember(this.client);
 
+		    this.client.setUsername(username.message);
+		    sendMessage(new Command(Command.CommandType.SUCCESS));
 		    while (this.isRunning && (inputLine = in.readLine()) != null) {
 			Command command = new Command(inputLine);
 			client.executeCommand(command);
 		    }
 		} else {
 		    System.out.println("Not authorized");
+		    sendMessage(new Command(Command.CommandType.FAILURE, "Not authorized"));
 		}
 	    } else {
 		System.out.println("Authentication information not provided");
+		sendMessage(new Command(Command.CommandType.FAILURE, "Authentication information not provided"));
 	    }
 	    System.out.println("Client thread stopping");
 	    socket.close();

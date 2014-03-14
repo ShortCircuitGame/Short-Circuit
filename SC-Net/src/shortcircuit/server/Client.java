@@ -1,16 +1,14 @@
 package shortcircuit.server;
 
-import java.util.UUID;
-
 import shortcircuit.shared.Command;
 
 public class Client {
     private ShortCircuitServerThread thread;
     private String username;
 
-    public Client(ShortCircuitServerThread thread) {
+    public Client(ShortCircuitServerThread thread, String username) {
 	this.thread = thread;
-	this.username = UUID.randomUUID().toString();
+	this.username = username;
     }
 
     public void sendCommand(Command command) {
@@ -25,11 +23,16 @@ public class Client {
 	return username;
     }
 
+    public void setUsername(String username){
+	this.username = username;
+    }
+    
     public void executeCommand(Command command) {
 
 	switch (command.command) {
 	case CHAT:
 	    this.thread.getRoom().broadcastCommand(command);
+	    break;
 	case CREATE:
 	    if (this.thread.getRoom() == ShortCircuitServer.getGetLobby()) {
 		this.thread.getRoom().removeMember(this);

@@ -29,7 +29,12 @@ public class Command {
 		this.command = type;
 		this.message = message;
 	}
-
+	
+	public Command(CommandType type) {
+		this.command = type;
+		this.message = "-";
+	}
+	
 	public String toString() {
 		return command.toString() + delimiter + message;
 	}
