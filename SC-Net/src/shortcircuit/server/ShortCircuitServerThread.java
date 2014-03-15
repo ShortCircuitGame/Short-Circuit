@@ -57,7 +57,7 @@ public class ShortCircuitServerThread extends Thread {
 
 					this.client.setUsername(username.message);
 					sendMessage(new Command(Command.CommandType.SUCCESS));
-					this.getRoom().broadcastCommand(new Command(CommandType.JOIN, this.client.getUsername()), this.client);
+					this.getRoom().broadcastCommand(new Command(CommandType.OTHERJOIN, this.client.getUsername()), this.client);
 					while (this.isRunning
 							&& (inputLine = in.readLine()) != null) {
 						Command command = new Command(inputLine);

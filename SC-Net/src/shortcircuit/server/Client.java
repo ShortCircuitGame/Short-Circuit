@@ -77,11 +77,12 @@ public class Client {
 			break;
 		case LEAVE:
 			if (this.thread.getRoom() != ShortCircuitServer.getGetLobby()) {
+				command.message = this.username;
 				this.thread.getRoom().broadcastCommand(command);
 				if (this.thread.getRoom().isEmpty()
 						|| this == this.thread.getRoom().getAdmin()) {
 					this.thread.getRoom().broadcastCommand(
-							new Command(Command.CommandType.JOINLOBBY));
+							new Command(Command.CommandType.KICK));
 					ShortCircuitServer.removeRoom(this.thread.getRoom()
 							.getRoomName());
 					ShortCircuitServer.getGetLobby().broadcastCommand(
@@ -92,8 +93,8 @@ public class Client {
 				this.thread.setRoom(ShortCircuitServer.getGetLobby());
 				this.thread.getRoom().addMember(this);
 				this.thread.getRoom().broadcastCommand(
-						new Command(Command.CommandType.JOIN, this.username),
-						this);
+						new Command(Command.CommandType.OTHERJOIN,
+								this.username), this);
 				sendCommand(new Command(Command.CommandType.JOINLOBBY));
 			} else {
 				System.out.println("You are already in the lobby");
@@ -101,6 +102,7 @@ public class Client {
 						"You are already in the lobby"));
 			}
 			break;
+			
 		case DISCONNECT:
 			this.thread.getRoom().removeMember(this);
 			this.thread.stopRunning();

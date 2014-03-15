@@ -253,6 +253,8 @@ public class GUI extends JFrame implements ClientEventListener {
 				case JOIN:
 					userModel.clear();
 					roomModel.clear();
+					textArea.setText("");
+					roomNameImput.setText("");
 					createRoomButton.setSelected(true);
 					createRoomButton.setText("Leave");
 					client.sendMessage(new Command(Command.CommandType.USERS));
@@ -266,9 +268,16 @@ public class GUI extends JFrame implements ClientEventListener {
 				case JOINLOBBY:
 					userModel.clear();
 					createRoomButton.setSelected(false);
+					textArea.setText("");
 					createRoomButton.setText("Create Room");
 					client.sendMessage(new Command(Command.CommandType.USERS));
 					client.sendMessage(new Command(Command.CommandType.ROOMS));
+					break;
+				case KICK:
+					userModel.clear();
+					textArea.setText("");
+					client.sendMessage(new Command(Command.CommandType.LEAVE));
+					createRoomButton.setSelected(true);
 					break;
 				case DISCONNECT:
 					userModel.removeElement(command.message);
