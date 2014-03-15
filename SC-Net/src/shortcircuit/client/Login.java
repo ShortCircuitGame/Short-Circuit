@@ -140,7 +140,7 @@ public class Login extends JDialog implements ClientEventListener {
 			frame.setVisible(true);
 			
 			client.removeListenet(Login.this);
-			
+			client.setUsername(textField.getText());
 			dispose();
 		    } else {
 			if (command.command == Command.CommandType.FAILURE) {

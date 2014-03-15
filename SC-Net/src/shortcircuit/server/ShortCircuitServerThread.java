@@ -57,6 +57,7 @@ public class ShortCircuitServerThread extends Thread {
 
 					this.client.setUsername(username.message);
 					sendMessage(new Command(Command.CommandType.SUCCESS));
+					this.getRoom().broadcastCommand(new Command(CommandType.JOIN, this.client.getUsername()), this.client);
 					while (this.isRunning
 							&& (inputLine = in.readLine()) != null) {
 						Command command = new Command(inputLine);
@@ -73,6 +74,8 @@ public class ShortCircuitServerThread extends Thread {
 						"Authentication information not provided"));
 			}
 			System.out.println("Client thread stopping");
+			this.getRoom().removeMember(this.client);
+			this.getRoom().broadcastCommand(new Command(CommandType.DISCONNECT), this.client);
 			socket.close();
 			this.out.close();
 		} catch (IOException e) {
@@ -86,16 +89,27 @@ public class ShortCircuitServerThread extends Thread {
 
 	public String generateRoomList() {
 		StringBuilder builder = new StringBuilder();
-		for (String key : ShortCircuitServer.getRoomList().keySet()) {
-			builder.append(ShortCircuitServer.getRoom(key).getRoomName() + ",");
+		Object[] keys = ShortCircuitServer.getRoomList().keySet().toArray();
+		int size = ShortCircuitServer.getRoomList().keySet().size();
+		for (int i = 0; i < size; i++) {
+			builder.append(ShortCircuitServer.getRoom((String) keys[i])
+					.getRoomName());
+			if (i != size - 1) {
+				builder.append(",");
+			}
 		}
 		return builder.toString();
 	}
 
 	public String generateMembersList() {
 		StringBuilder builder = new StringBuilder();
-		for (String key : this.room.getMemberList().keySet()) {
-			builder.append(this.room.getMember(key).getUsername() + ",");
+		Object[] keys = this.room.getMemberList().keySet().toArray();
+		int size = this.room.getMemberList().keySet().size();
+		for (int i = 0; i < size; i++) {
+			builder.append(this.room.getMember((String) keys[i]).getUsername());
+			if (i != size - 1) {
+				builder.append(",");
+			}
 		}
 		return builder.toString();
 	}

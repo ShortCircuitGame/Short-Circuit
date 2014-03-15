@@ -1,8 +1,9 @@
 package shortcircuit.shared;
+
 public class Command {
 
 	public static enum CommandType {
-		CREATE, JOIN, OTHERJOIN, ROOMS, USERS, LEAVE, DISCONNECT, CHAT, START, STOP, NONE, SUCCESS, FAILURE, USERNAME, PASSWORD, SIGNUP, SIGNIN
+		CREATE, JOIN, OTHERJOIN, JOINLOBBY, ROOMS, ROOMDESTROY, USERS, LEAVE, DISCONNECT, CHAT, START, STOP, NONE, SUCCESS, FAILURE, USERNAME, PASSWORD, SIGNUP, SIGNIN
 	};
 
 	public static final String delimiter = "/";
@@ -24,17 +25,21 @@ public class Command {
 			System.err.println("Command recieved is not correctly formatted");
 		}
 	}
-	
+
 	public Command(CommandType type, String message) {
 		this.command = type;
-		this.message = message;
+		if (message.isEmpty()) {
+			this.message = "-";
+		} else {
+			this.message = message;
+		}
 	}
-	
+
 	public Command(CommandType type) {
 		this.command = type;
 		this.message = "-";
 	}
-	
+
 	public String toString() {
 		return command.toString() + delimiter + message;
 	}

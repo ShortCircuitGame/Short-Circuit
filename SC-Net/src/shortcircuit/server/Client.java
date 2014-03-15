@@ -39,6 +39,12 @@ public class Client {
 				this.thread.getRoom().removeMember(this);
 				this.thread.setRoom(ShortCircuitServer.createRoom(
 						command.message, this));
+				ShortCircuitServer.getGetLobby()
+						.broadcastCommand(
+								new Command(Command.CommandType.CREATE,
+										command.message));
+				ShortCircuitServer.getGetLobby().broadcastCommand(
+						new Command(Command.CommandType.LEAVE, this.username));
 				this.thread.getRoom().addMember(this);
 				this.thread.getRoom().broadcastCommand(command);
 				sendCommand(new Command(Command.CommandType.JOIN,
@@ -71,10 +77,24 @@ public class Client {
 			break;
 		case LEAVE:
 			if (this.thread.getRoom() != ShortCircuitServer.getGetLobby()) {
+				this.thread.getRoom().broadcastCommand(command);
+				if (this.thread.getRoom().isEmpty()
+						|| this == this.thread.getRoom().getAdmin()) {
+					this.thread.getRoom().broadcastCommand(
+							new Command(Command.CommandType.JOINLOBBY));
+					ShortCircuitServer.removeRoom(this.thread.getRoom()
+							.getRoomName());
+					ShortCircuitServer.getGetLobby().broadcastCommand(
+							new Command(Command.CommandType.ROOMDESTROY,
+									this.thread.getRoom().getRoomName()));
+				}
 				this.thread.getRoom().removeMember(this);
 				this.thread.setRoom(ShortCircuitServer.getGetLobby());
 				this.thread.getRoom().addMember(this);
-				this.thread.getRoom().broadcastCommand(command);
+				this.thread.getRoom().broadcastCommand(
+						new Command(Command.CommandType.JOIN, this.username),
+						this);
+				sendCommand(new Command(Command.CommandType.JOINLOBBY));
 			} else {
 				System.out.println("You are already in the lobby");
 				sendCommand(new Command(Command.CommandType.FAILURE,

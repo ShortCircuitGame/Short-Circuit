@@ -2,8 +2,15 @@ package shortcircuit.client;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -12,13 +19,12 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import shortcircuit.shared.Command;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class GUI extends JFrame implements ClientEventListener {
 
@@ -28,7 +34,10 @@ public class GUI extends JFrame implements ClientEventListener {
 	private ShortCircuitClient client;
 	private JTextArea textArea;
 	private JList userList;
+	private DefaultListModel userModel;
 	private JList roomList;
+	private DefaultListModel roomModel;
+	private JToggleButton createRoomButton;
 
 	/**
 	 * Create the frame.
@@ -42,15 +51,38 @@ public class GUI extends JFrame implements ClientEventListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		roomList = new JList();
+		roomModel = new DefaultListModel();
+		roomList = new JList(roomModel);
 		roomList.setBorder(new LineBorder(new Color(0, 0, 0)));
+		roomList.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evt) {
+				JList list = (JList) evt.getSource();
+				if (evt.getClickCount() == 2) {
+					client.sendMessage(new Command(Command.CommandType.JOIN,
+							(String) roomList.getSelectedValue()));
+				}
+			}
+		});
 
-		JButton createRoomButton = new JButton("Create Room");
+		createRoomButton = new JToggleButton("Create Room");
+		createRoomButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (createRoomButton.isSelected()) {
+					client.sendMessage(new Command(Command.CommandType.CREATE,
+							roomNameImput.getText()));
+					createRoomButton.setSelected(false);
+				} else {
+					client.sendMessage(new Command(Command.CommandType.LEAVE));
+					createRoomButton.setSelected(true);
+				}
+			}
+		});
 
 		roomNameImput = new JTextField();
 		roomNameImput.setColumns(10);
 
-		userList = new JList();
+		userModel = new DefaultListModel();
+		userList = new JList(userModel);
 		userList.setBorder(new LineBorder(new Color(0, 0, 0)));
 
 		JButton startButton = new JButton("Start");
@@ -194,6 +226,17 @@ public class GUI extends JFrame implements ClientEventListener {
 
 		this.client = client;
 		this.client.addListener(this);
+
+		client.sendMessage(new Command(Command.CommandType.ROOMS));
+		client.sendMessage(new Command(Command.CommandType.USERS));
+
+		/*
+		 * Timer timer = new Timer(); timer.schedule(new TimerTask() {
+		 * 
+		 * @Override public void run() { client.sendMessage(new
+		 * Command(Command.CommandType.ROOMS)); client.sendMessage(new
+		 * Command(Command.CommandType.USERS)); } }, 0, 10 * 1000);
+		 */
 	}
 
 	@Override
@@ -205,16 +248,47 @@ public class GUI extends JFrame implements ClientEventListener {
 					textArea.append(command.message + "\n");
 					break;
 				case CREATE:
+					roomModel.addElement(command.message);
 					break;
 				case JOIN:
+					userModel.clear();
+					roomModel.clear();
+					createRoomButton.setSelected(true);
+					createRoomButton.setText("Leave");
+					client.sendMessage(new Command(Command.CommandType.USERS));
+					break;
+				case OTHERJOIN:
+					userModel.addElement(command.message);
 					break;
 				case LEAVE:
+					userModel.removeElement(command.message);
+					break;
+				case JOINLOBBY:
+					userModel.clear();
+					createRoomButton.setSelected(false);
+					createRoomButton.setText("Create Room");
+					client.sendMessage(new Command(Command.CommandType.USERS));
+					client.sendMessage(new Command(Command.CommandType.ROOMS));
 					break;
 				case DISCONNECT:
+					userModel.removeElement(command.message);
+					break;
+				case ROOMDESTROY:
+					roomModel.removeElement(command.message);
 					break;
 				case ROOMS:
+					roomModel.clear();
+					String[] rooms = command.message.split(",");
+					for (int i = 0; i < rooms.length; i++) {
+						roomModel.addElement(rooms[i]);
+					}
 					break;
 				case USERS:
+					userModel.clear();
+					String[] users = command.message.split(",");
+					for (int i = 0; i < users.length; i++) {
+						userModel.addElement(users[i]);
+					}
 					break;
 				case START:
 					break;

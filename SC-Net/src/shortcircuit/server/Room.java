@@ -55,4 +55,7 @@ public class Room {
 		return admin;
 	}
 
+	public boolean isEmpty() {
+		return (this.members.size() == 0);
+	}
 }
