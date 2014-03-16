@@ -25,6 +25,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import shortcircuit.shared.Command;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.ButtonGroup;
 
 public class GUI extends JFrame implements ClientEventListener {
 
@@ -38,6 +43,14 @@ public class GUI extends JFrame implements ClientEventListener {
 	private JList roomList;
 	private DefaultListModel roomModel;
 	private JToggleButton createRoomButton;
+	private JMenu mnRace;
+	private JRadioButtonMenuItem rdbtnmntmBio;
+	private JRadioButtonMenuItem rdbtnmntmMecha;
+	private JRadioButtonMenuItem rdbtnmntmProtoss;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JMenu mnMap;
+	private JRadioButtonMenuItem rdbtnmntmTest;
+	private final ButtonGroup buttonGroup_1 = new ButtonGroup();
 
 	/**
 	 * Create the frame.
@@ -47,6 +60,42 @@ public class GUI extends JFrame implements ClientEventListener {
 	public GUI(final ShortCircuitClient client) throws IOException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 516, 358);
+
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+
+		JMenu mnProgram = new JMenu("Program");
+		menuBar.add(mnProgram);
+
+		JMenuItem mntmDisconnect = new JMenuItem("Disconnect");
+		mntmDisconnect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				client.sendMessage(new Command(Command.CommandType.DISCONNECT));
+			}
+		});
+		mnProgram.add(mntmDisconnect);
+		
+		mnRace = new JMenu("Race");
+		menuBar.add(mnRace);
+		
+		rdbtnmntmBio = new JRadioButtonMenuItem("Bio");
+		buttonGroup.add(rdbtnmntmBio);
+		mnRace.add(rdbtnmntmBio);
+		
+		rdbtnmntmMecha = new JRadioButtonMenuItem("Mecha");
+		buttonGroup.add(rdbtnmntmMecha);
+		mnRace.add(rdbtnmntmMecha);
+		
+		rdbtnmntmProtoss = new JRadioButtonMenuItem("Protoss");
+		buttonGroup.add(rdbtnmntmProtoss);
+		mnRace.add(rdbtnmntmProtoss);
+		
+		mnMap = new JMenu("Map");
+		menuBar.add(mnMap);
+		
+		rdbtnmntmTest = new JRadioButtonMenuItem("Test");
+		buttonGroup_1.add(rdbtnmntmTest);
+		mnMap.add(rdbtnmntmTest);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
