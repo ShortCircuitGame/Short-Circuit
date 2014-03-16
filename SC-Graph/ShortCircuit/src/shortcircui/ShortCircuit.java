@@ -12,13 +12,15 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 
 public class ShortCircuit implements ApplicationListener {
 	TiledMap map;
 	OrthographicCamera camera;
 	OrthoCamController cameraController;
-	HexagonalTiledMapRenderer renderer;
+	OrthogonalTiledMapRenderer renderer;
 	Texture hexture;
 
 	@Override
@@ -33,22 +35,23 @@ public class ShortCircuit implements ApplicationListener {
 		cameraController = new OrthoCamController(camera);
 		Gdx.input.setInputProcessor(cameraController);
 
-		hexture = new Texture(Gdx.files.internal("data/hexes.png"));
-		TextureRegion[][] hexes = TextureRegion.split(hexture, 112, 97);
+		hexture = new Texture(Gdx.files.internal("data/tiles.png"));
+		TextureRegion[][] hexes = TextureRegion.split(hexture, 64, 64);
 		map = new TiledMap();
 		MapLayers layers = map.getLayers();
-		TiledMapTile[] tiles = new TiledMapTile[3];
+		TiledMapTile[] tiles = new TiledMapTile[4];
 		tiles[0] = new StaticTiledMapTile(new TextureRegion(hexes[0][0]));
 		tiles[1] = new StaticTiledMapTile(new TextureRegion(hexes[0][1]));
 		tiles[2] = new StaticTiledMapTile(new TextureRegion(hexes[1][0]));
+		tiles[3] = new StaticTiledMapTile(new TextureRegion(hexes[1][1]));
 
 		int width = 15;
 		int height = 10;
 		for (int l = 0; l < 1; l++) {
-			TiledMapTileLayer layer = new TiledMapTileLayer(width, height, 112, 97);
+			TiledMapTileLayer layer = new TiledMapTileLayer(width, height, 64, 64);
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
-					int id = (int) (Math.random() * 3);
+					int id = (int) (Math.random() * 4);
 					Cell cell = new Cell();
 					cell.setTile(tiles[id]);
 					layer.setCell(x, y, cell);
@@ -57,12 +60,12 @@ public class ShortCircuit implements ApplicationListener {
 			layers.add(layer);
 		}
 
-		renderer = new HexagonalTiledMapRenderer(map);
+		renderer = new OrthogonalTiledMapRenderer(map);
 	}
 
 	@Override
 	public void render() {
-		Gdx.gl.glClearColor(0.25f, 0.25f, 0.25f, 1f);
+		Gdx.gl.glClearColor(0.10f, 0.10f, 0.10f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
 		renderer.setView(camera);
@@ -71,7 +74,7 @@ public class ShortCircuit implements ApplicationListener {
 
 	@Override
 	public void dispose() {
-		renderer.dispose();
+		renderer.dispose(); 
 		hexture.dispose();
 		map.dispose();
 	}
