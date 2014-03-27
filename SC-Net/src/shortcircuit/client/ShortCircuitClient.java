@@ -13,56 +13,68 @@ import shortcircuit.shared.Simulator;
 
 public class ShortCircuitClient extends Thread {
 
-    private Simulator sim;
-    private PrintWriter out;
-    private ArrayList<ClientEventListener> listeners;
+	private Simulator sim;
+	private PrintWriter out;
+	private ArrayList<ClientEventListener> listeners;
+	private String username;
 
-    public ShortCircuitClient() {
-	this.sim = new Simulator(0, 0, null);
-	this.listeners = new ArrayList<ClientEventListener>();
-    }
-
-    public void run() {
-	String hostName = "localhost";
-	int portNumber = 8970;
-
-	try (Socket socket = new Socket(hostName, portNumber);
-		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-		BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));) {
-	    String fromServer;
-
-	    this.out = out;
-	    Command command;
-	    while ((fromServer = in.readLine()) != null) {
-		command = new Command(fromServer);
-		System.out.println(fromServer);
-		notifyListeners(command);
-
-	    }
-	} catch (UnknownHostException e) {
-	    System.err.println("Don't know about host " + hostName);
-	} catch (IOException e) {
-	    System.err.println("Couldn't get I/O for the connection to " + hostName);
+	public ShortCircuitClient() {
+		this.sim = new Simulator(0, 0, null);
+		this.listeners = new ArrayList<ClientEventListener>();
 	}
-    }
 
-    public void sendMessage(Command command) {
-	this.out.println(command.toString());
-    }
+	public void run() {
+		String hostName = "localhost";
+		int portNumber = 8970;
 
-    private void notifyListeners(Command command) {
-	for (ClientEventListener listener : listeners) {
-	    listener.commandRecievedEvent(command);
+		try (Socket socket = new Socket(hostName, portNumber);
+				PrintWriter out = new PrintWriter(socket.getOutputStream(),
+						true);
+				BufferedReader in = new BufferedReader(new InputStreamReader(
+						socket.getInputStream()));) {
+			String fromServer;
+
+			this.out = out;
+			Command command;
+			while ((fromServer = in.readLine()) != null) {
+				command = new Command(fromServer);
+				System.out.println(fromServer);
+				notifyListeners(command);
+
+			}
+		} catch (UnknownHostException e) {
+			System.err.println("Don't know about host " + hostName);
+		} catch (IOException e) {
+			System.err.println("Couldn't get I/O for the connection to "
+					+ hostName);
+		}
 	}
-    }
 
-    public void addListener(ClientEventListener listener) {
-	if (!listeners.contains(listener)) {
-	    listeners.add(listener);
+	public void sendMessage(Command command) {
+		this.out.println(command.toString());
 	}
-    }
 
-    public void removeListenet(ClientEventListener listener) {
-	listeners.remove(listener);
-    }
+	private void notifyListeners(Command command) {
+		for (ClientEventListener listener : listeners) {
+			listener.commandRecievedEvent(command);
+		}
+	}
+
+	public void addListener(ClientEventListener listener) {
+		if (!listeners.contains(listener)) {
+			listeners.add(listener);
+		}
+	}
+
+	public void removeListenet(ClientEventListener listener) {
+		listeners.remove(listener);
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 }
