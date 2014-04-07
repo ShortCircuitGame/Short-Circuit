@@ -104,6 +104,7 @@ public class Client {
 			break;
 			
 		case DISCONNECT:
+		    	command.message = this.username;
 			this.thread.getRoom().removeMember(this);
 			this.thread.stopRunning();
 			this.thread.getRoom().broadcastCommand(command);

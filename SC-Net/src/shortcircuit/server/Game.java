@@ -76,7 +76,7 @@ public class Game {
 
 		try (ServerSocket serverSocket = new ServerSocket(PORT_NUMBER)) {	//This line will handle creating a socket, binding it and start listening for connections
 			for (int i = 0; i < MAX_PLAYERS; i++) {				//Accept up to MAX_PLAYERS number of players
-				new ServerThread(serverSocket.accept(), i, game).start();	//Create a thread and pass the new socket, an ID and a reference to the game instance
+				new ShortCircuitServerThread(serverSocket.accept()).start();	//Create a thread and pass the new socket, an ID and a reference to the game instance
 				game.players.add(new Player(rnd.nextInt(WIDTH), rnd		//Create a new Player instance and add it to the list
 						.nextInt(HEIGHT), 'X'));
 			}

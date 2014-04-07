@@ -71,6 +71,7 @@ public class GUI extends JFrame implements ClientEventListener {
 		mntmDisconnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				client.sendMessage(new Command(Command.CommandType.DISCONNECT));
+				dispose();
 			}
 		});
 		mnProgram.add(mntmDisconnect);
@@ -329,7 +330,11 @@ public class GUI extends JFrame implements ClientEventListener {
 					createRoomButton.setSelected(true);
 					break;
 				case DISCONNECT:
-					userModel.removeElement(command.message);
+				    	if(client.getUsername().equals(command.message)){
+				    	    dispose();
+				    	}else{
+				    	    userModel.removeElement(command.message);
+				    	}
 					break;
 				case ROOMDESTROY:
 					roomModel.removeElement(command.message);
@@ -338,7 +343,9 @@ public class GUI extends JFrame implements ClientEventListener {
 					roomModel.clear();
 					String[] rooms = command.message.split(",");
 					for (int i = 0; i < rooms.length; i++) {
+					    if(!"-".equals(rooms[i])){
 						roomModel.addElement(rooms[i]);
+					    }
 					}
 					break;
 				case USERS:
