@@ -7,16 +7,19 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
@@ -25,11 +28,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import shortcircuit.shared.Command;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.ButtonGroup;
+import shortcircuit.shared.Game;
 
 public class GUI extends JFrame implements ClientEventListener {
 
@@ -51,7 +50,8 @@ public class GUI extends JFrame implements ClientEventListener {
 	private JMenu mnMap;
 	private JRadioButtonMenuItem rdbtnmntmTest;
 	private final ButtonGroup buttonGroup_1 = new ButtonGroup();
-
+	private Game game;
+	
 	/**
 	 * Create the frame.
 	 * 
@@ -136,6 +136,11 @@ public class GUI extends JFrame implements ClientEventListener {
 		userList.setBorder(new LineBorder(new Color(0, 0, 0)));
 
 		JButton startButton = new JButton("Start");
+		startButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			    client.sendMessage(new Command(Command.CommandType.START));
+			}
+		});
 
 		textArea = new JTextArea();
 		textArea.setBackground(Color.LIGHT_GRAY);
