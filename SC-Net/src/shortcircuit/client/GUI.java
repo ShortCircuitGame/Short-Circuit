@@ -309,6 +309,7 @@ public class GUI extends JFrame implements ClientEventListener {
 				case LEFT:
 				case RIGHT:
 				    window.getGame().getPlayers().get(Integer.parseInt(command.message)).execute(command.command);
+				    window.repaint();
 				    break;
 				    	
 				default:

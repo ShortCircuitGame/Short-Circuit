@@ -9,9 +9,9 @@ import shortcircuit.shared.Command.CommandType;
 public class Game {
 
     /* Parameters for the game */
-    public static final int WIDTH = 160;
-    public static final int HEIGHT = 90;
-    public static final int MAX_PLAYERS = 2;
+    public static final int WIDTH = 80;
+    public static final int HEIGHT = 45;
+    public static final int MAX_PLAYERS = 4;
 
     public static final String COMA = ",";
     public int seed;
@@ -49,7 +49,7 @@ public class Game {
     }
 
     public boolean execute(int id, CommandType command) {
-	if (id == currentTurn) {
+	if (id != currentTurn) {
 	    return false;
 	} else {
 	    this.players.get(id).execute(command);
