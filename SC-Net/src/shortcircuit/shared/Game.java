@@ -9,40 +9,41 @@ import shortcircuit.shared.Command.CommandType;
 public class Game {
 
     /* Parameters for the game */
-    public static final int WIDTH = 40;
-    public static final int HEIGHT = 15;
-    public static final int MAX_PLAYERS = 4;
+    public static final int WIDTH = 160;
+    public static final int HEIGHT = 90;
+    public static final int MAX_PLAYERS = 2;
 
-    public static final char COMA = ',';
+    public static final String COMA = ",";
     public int seed;
     public int currentTurn = -1;
     public Random rnd;
-    public char[][] map; // The map is simply a matrix of Characters
+    public int[][] map; // The map is simply a matrix of Characters
     private ArrayList<Player> players; // List that holds a reference for each
-				       // client
-
+				       // client    
+    public Game() {
+	seed = 100;
+	players = new ArrayList<Player>();
+	generateMap();
+    }
+    
     public Game(String content) {
 	Scanner scan = new Scanner(content);
 	scan.useDelimiter(",");
 	seed = scan.nextInt();
 	players = new ArrayList<Player>();
-	for(int i = 0; i < 4; i++){
+	for(int i = 0; i < MAX_PLAYERS; i++){
 	    players.add(new Player(scan.nextInt(), scan.nextInt(), 0, this));
-	}	
+	}
+	generateMap();
     }
 
     private void generateMap() {
-	map = new char[HEIGHT][WIDTH]; // Initialize the matrix
+	map = new int[HEIGHT][WIDTH]; // Initialize the matrix
 	rnd = new Random(seed);
 	int mod = 0;
 	for (int i = 0; i < WIDTH; i++) {
 	    for (int j = 0; j < HEIGHT; j++) {
-		if (rnd.nextInt() % 5 == 0 && rnd.nextInt() % 3 == 0) {
-		    mod = 1;
-		} else {
-		    mod = 0;
-		}
-		map[j][i] = (char) (35 + mod);
+		map[j][i] = (int) (rnd.nextInt(255));
 	    }
 	}
     }
@@ -69,6 +70,10 @@ public class Game {
 	this.players = players;
     }
     
+    public ArrayList<Player> getPlayers(){
+	return this.players;
+    }
+    
     public void start(){
 	this.currentTurn = 0;
     }
@@ -76,7 +81,7 @@ public class Game {
     public String toString(){
 	StringBuilder builder = new StringBuilder();
 	builder.append(seed + COMA);
-	for(int i = 0; i < 4; i++){
+	for(int i = 0; i < MAX_PLAYERS; i++){
 	    builder.append(players.get(i).x + COMA);
 	    builder.append(players.get(i).y + COMA);
 	}

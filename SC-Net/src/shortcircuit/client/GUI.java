@@ -27,7 +27,9 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import shortcircuit.server.Client;
 import shortcircuit.shared.Command;
+import shortcircuit.shared.Command.CommandType;
 import shortcircuit.shared.Game;
 
 public class GUI extends JFrame implements ClientEventListener {
@@ -50,7 +52,8 @@ public class GUI extends JFrame implements ClientEventListener {
 	private JMenu mnMap;
 	private JRadioButtonMenuItem rdbtnmntmTest;
 	private final ButtonGroup buttonGroup_1 = new ButtonGroup();
-	private Game game;
+	private JToggleButton startButton;	
+	private Skeleton window;
 	
 	/**
 	 * Create the frame.
@@ -80,6 +83,7 @@ public class GUI extends JFrame implements ClientEventListener {
 		menuBar.add(mnRace);
 		
 		rdbtnmntmBio = new JRadioButtonMenuItem("Bio");
+		rdbtnmntmBio.setSelected(true);
 		buttonGroup.add(rdbtnmntmBio);
 		mnRace.add(rdbtnmntmBio);
 		
@@ -95,6 +99,7 @@ public class GUI extends JFrame implements ClientEventListener {
 		menuBar.add(mnMap);
 		
 		rdbtnmntmTest = new JRadioButtonMenuItem("Test");
+		rdbtnmntmTest.setSelected(true);
 		buttonGroup_1.add(rdbtnmntmTest);
 		mnMap.add(rdbtnmntmTest);
 		contentPane = new JPanel();
@@ -135,10 +140,16 @@ public class GUI extends JFrame implements ClientEventListener {
 		userList = new JList(userModel);
 		userList.setBorder(new LineBorder(new Color(0, 0, 0)));
 
-		JButton startButton = new JButton("Start");
+		startButton = new JToggleButton("Start");
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			    client.sendMessage(new Command(Command.CommandType.START));
+			    if(startButton.isSelected()){
+				client.sendMessage(new Command(Command.CommandType.START));	
+				startButton.setSelected(false);
+			    }else{
+				client.sendMessage(new Command(Command.CommandType.STOP));
+				startButton.setSelected(true);
+			    }
 			}
 		});
 
@@ -146,6 +157,16 @@ public class GUI extends JFrame implements ClientEventListener {
 		textArea.setBackground(Color.LIGHT_GRAY);
 
 		textInput = new JTextField();
+		textInput.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String message = textInput.getText();
+				if (!message.isEmpty()) {
+					client.sendMessage(new Command(Command.CommandType.CHAT,
+							message));
+					textInput.setText("");
+				}			    
+			}
+		});
 		textInput.setColumns(10);
 
 		JButton sendButton = new JButton("Send");
@@ -160,123 +181,43 @@ public class GUI extends JFrame implements ClientEventListener {
 			}
 		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane
-				.setHorizontalGroup(gl_contentPane
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING,
-																false)
-														.addComponent(
-																roomList,
-																GroupLayout.PREFERRED_SIZE,
-																125,
-																GroupLayout.PREFERRED_SIZE)
-														.addGroup(
-																gl_contentPane
-																		.createParallelGroup(
-																				Alignment.TRAILING,
-																				false)
-																		.addComponent(
-																				createRoomButton,
-																				Alignment.LEADING,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				Short.MAX_VALUE)
-																		.addComponent(
-																				roomNameImput,
-																				Alignment.LEADING)))
-										.addGap(18)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addComponent(
-																				textInput,
-																				GroupLayout.DEFAULT_SIZE,
-																				161,
-																				Short.MAX_VALUE)
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				sendButton))
-														.addComponent(
-																textArea,
-																GroupLayout.DEFAULT_SIZE,
-																237,
-																Short.MAX_VALUE))
-										.addGap(18)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.TRAILING,
-																false)
-														.addComponent(
-																userList,
-																GroupLayout.PREFERRED_SIZE,
-																106,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																startButton))));
-		gl_contentPane
-				.setVerticalGroup(gl_contentPane
-						.createParallelGroup(Alignment.TRAILING)
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.TRAILING)
-														.addComponent(
-																textArea,
-																GroupLayout.DEFAULT_SIZE,
-																291,
-																Short.MAX_VALUE)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addComponent(
-																				roomList,
-																				GroupLayout.DEFAULT_SIZE,
-																				266,
-																				Short.MAX_VALUE)
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				roomNameImput,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE))
-														.addComponent(
-																userList,
-																GroupLayout.DEFAULT_SIZE,
-																291,
-																Short.MAX_VALUE))
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																createRoomButton)
-														.addComponent(
-																startButton)
-														.addComponent(
-																textInput,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																sendButton))));
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(roomList, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(createRoomButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(roomNameImput, Alignment.LEADING)))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(textInput, GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(sendButton))
+						.addComponent(textArea, GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(startButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(userList, GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(textArea, GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(roomList, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(roomNameImput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(userList, GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(createRoomButton)
+						.addComponent(startButton)
+						.addComponent(textInput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(sendButton)))
+		);
 		contentPane.setLayout(gl_contentPane);
 
 		this.client = client;
@@ -284,14 +225,6 @@ public class GUI extends JFrame implements ClientEventListener {
 
 		client.sendMessage(new Command(Command.CommandType.ROOMS));
 		client.sendMessage(new Command(Command.CommandType.USERS));
-
-		/*
-		 * Timer timer = new Timer(); timer.schedule(new TimerTask() {
-		 * 
-		 * @Override public void run() { client.sendMessage(new
-		 * Command(Command.CommandType.ROOMS)); client.sendMessage(new
-		 * Command(Command.CommandType.USERS)); } }, 0, 10 * 1000);
-		 */
 	}
 
 	@Override
@@ -361,9 +294,23 @@ public class GUI extends JFrame implements ClientEventListener {
 					}
 					break;
 				case START:
+				    	startButton.setSelected(true);
+				    	startButton.setText("Stop");
+				    	window = new Skeleton(client, command.message);
+				    	window.setVisible(true);
 					break;
 				case STOP:
+				    	startButton.setSelected(false);
+				    	startButton.setText("Start");
+				    	window.dispose();
 					break;
+				case UP:
+				case DOWN:
+				case LEFT:
+				case RIGHT:
+				    window.getGame().getPlayers().get(Integer.parseInt(command.message)).execute(command.command);
+				    break;
+				    	
 				default:
 					break;
 				}

@@ -1,6 +1,7 @@
 package shortcircuit.server;
 
 import shortcircuit.shared.Command;
+import shortcircuit.shared.Game;
 import shortcircuit.shared.Player;
 
 public class Client {
@@ -54,7 +55,7 @@ public class Client {
 	    break;
 	case JOIN:
 	    if (this.thread.getRoom() == ShortCircuitServer.getGetLobby()) {
-		if(ShortCircuitServer.getRoom(command.message).getMemberList().size() >= 4){
+		if(ShortCircuitServer.getRoom(command.message).getMemberList().size() >= Game.MAX_PLAYERS){
 		    System.out.println("Room is full");
 		    sendCommand(new Command(Command.CommandType.FAILURE, "Room is full"));
 		}
@@ -106,7 +107,7 @@ public class Client {
 		sendCommand(new Command(Command.CommandType.FAILURE, "You cannot start a game in the lobby"));
 		break;
 	    }
-	    if (this.thread.getRoom().getMemberList().size() != 4) {
+	    if (this.thread.getRoom().getMemberList().size() != Game.MAX_PLAYERS) {
 		System.out.println("You need 4 people to start a game");
 		sendCommand(new Command(Command.CommandType.FAILURE, "You need 4 people to start a game"));
 		break;
@@ -122,6 +123,8 @@ public class Client {
 	    }
 	    break;
 	case STOP:
+	    this.thread.getRoom().broadcastCommand(command);
+	    this.thread.getRoom().stopGame();
 	    break;
 	case TURN:
 	    break;

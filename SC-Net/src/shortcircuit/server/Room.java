@@ -2,11 +2,12 @@ package shortcircuit.server;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Random;
 
 import shortcircuit.shared.Command;
+import shortcircuit.shared.Command.CommandType;
 import shortcircuit.shared.Game;
 import shortcircuit.shared.Player;
-import shortcircuit.shared.Command.CommandType;
 
 public class Room {
     private Client admin;
@@ -67,6 +68,7 @@ public class Room {
 
     public boolean startGame(Client client) {
 	if (client == admin) {
+	    this.game = new Game();
 	    this.game.start();
 	    return true;
 	} else {
@@ -79,17 +81,20 @@ public class Room {
 	ArrayList<Player> players = new ArrayList<Player>();
 	this.clients = new ArrayList<Client>();
 	
+	Random random = new Random();
 	for (String key : members.keySet()) {
 	    Client client = members.get(key);
 	    client.setId(i);
 	    this.clients.add(client);
-	    players.add(new Player(0, 0, i, game));
+	    players.add(new Player(random.nextInt(Game.WIDTH), random.nextInt(Game.HEIGHT), i, game));
 	    i++;
 	}
+	this.game.setPlayers(players);
     }
 
     public void runCommand(int id, CommandType command) {
-	if(this.game.execute(id, command)){
+	if(this.game != null && this.game.execute(id, command)){
+	    this.broadcastCommand(new Command(command, Integer.toString(id)));
 	    notifyTurn(this.game.currentTurn);
 	}
     }
@@ -100,5 +105,9 @@ public class Room {
     
     public Game getGame(){
 	return this.game;
+    }
+
+    public void stopGame() {
+	this.game = null;	
     }
 }

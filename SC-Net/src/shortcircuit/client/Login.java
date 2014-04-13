@@ -135,12 +135,11 @@ public class Login extends JDialog implements ClientEventListener {
 	EventQueue.invokeLater(new Runnable() {
 	    public void run() {
 		try {
-		    if (command.command == Command.CommandType.SUCCESS) {
-			GUI frame = new GUI(client);
-			frame.setVisible(true);
-			
+		    if (command.command == Command.CommandType.SUCCESS) {			
 			client.removeListenet(Login.this);
 			client.setUsername(textField.getText());
+			GUI frame = new GUI(client);
+			frame.setVisible(true);
 			dispose();
 		    } else {
 			if (command.command == Command.CommandType.FAILURE) {

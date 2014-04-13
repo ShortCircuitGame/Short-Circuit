@@ -56,8 +56,8 @@ public class ShortCircuitServerThread extends Thread {
 					this.getRoom().addMember(this.client);
 
 					this.client.setUsername(username.message);
-					sendMessage(new Command(Command.CommandType.SUCCESS));
 					this.getRoom().broadcastCommand(new Command(CommandType.OTHERJOIN, this.client.getUsername()), this.client);
+					sendMessage(new Command(Command.CommandType.SUCCESS));
 					while (this.isRunning
 							&& (inputLine = in.readLine()) != null) {
 						Command command = new Command(inputLine);
@@ -75,7 +75,7 @@ public class ShortCircuitServerThread extends Thread {
 			}
 			System.out.println("Client thread stopping");
 			this.getRoom().removeMember(this.client);
-			this.getRoom().broadcastCommand(new Command(CommandType.DISCONNECT), this.client);
+			this.getRoom().broadcastCommand(new Command(CommandType.DISCONNECT, this.client.getUsername()));
 			socket.close();
 			this.out.close();
 		} catch (IOException e) {
