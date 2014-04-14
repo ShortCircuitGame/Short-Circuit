@@ -18,6 +18,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextArea;
@@ -27,10 +28,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import shortcircuit.server.Client;
 import shortcircuit.shared.Command;
-import shortcircuit.shared.Command.CommandType;
-import shortcircuit.shared.Game;
 
 public class GUI extends JFrame implements ClientEventListener {
 
@@ -311,7 +309,8 @@ public class GUI extends JFrame implements ClientEventListener {
 				    window.getGame().getPlayers().get(Integer.parseInt(command.message)).execute(command.command);
 				    window.repaint();
 				    break;
-				    	
+				case TURN:
+					JOptionPane.showMessageDialog(GUI.this, "It is your turn!");
 				default:
 					break;
 				}

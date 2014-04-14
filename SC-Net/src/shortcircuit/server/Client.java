@@ -3,6 +3,7 @@ package shortcircuit.server;
 import shortcircuit.shared.Command;
 import shortcircuit.shared.Game;
 import shortcircuit.shared.Player;
+import shortcircuit.shared.Command.CommandType;
 
 public class Client {
     private ShortCircuitServerThread thread;
@@ -60,10 +61,11 @@ public class Client {
 		    sendCommand(new Command(Command.CommandType.FAILURE, "Room is full"));
 		}
 		this.thread.getRoom().removeMember(this);
+		this.thread.getRoom().broadcastCommand(new Command(CommandType.LEAVE, this.username), this);
 		this.thread.setRoom(ShortCircuitServer.getRoom(command.message));
 		this.thread.getRoom().addMember(this);
 		sendCommand(new Command(Command.CommandType.JOIN, command.message));
-		this.thread.getRoom().broadcastCommand(new Command(Command.CommandType.OTHERJOIN, command.message), this);
+		this.thread.getRoom().broadcastCommand(new Command(Command.CommandType.OTHERJOIN, this.username), this);
 	    } else {
 		System.out.println("You are already in a room");
 		sendCommand(new Command(Command.CommandType.FAILURE, "You are already in a room"));
