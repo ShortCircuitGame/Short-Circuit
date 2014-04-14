@@ -35,7 +35,7 @@ import shortcircuit.shared.Game;
 public class GUI extends JFrame implements ClientEventListener {
 
 	private JPanel contentPane;
-	private JTextField roomNameImput;
+	private JTextField roomNameInput;
 	private JTextField textInput;
 	private ShortCircuitClient client;
 	private JTextArea textArea;
@@ -124,7 +124,7 @@ public class GUI extends JFrame implements ClientEventListener {
 			public void actionPerformed(ActionEvent arg0) {
 				if (createRoomButton.isSelected()) {
 					client.sendMessage(new Command(Command.CommandType.CREATE,
-							roomNameImput.getText()));
+							roomNameInput.getText()));
 					createRoomButton.setSelected(false);
 				} else {
 					client.sendMessage(new Command(Command.CommandType.LEAVE));
@@ -133,8 +133,8 @@ public class GUI extends JFrame implements ClientEventListener {
 			}
 		});
 
-		roomNameImput = new JTextField();
-		roomNameImput.setColumns(10);
+		roomNameInput = new JTextField();
+		roomNameInput.setColumns(10);
 
 		userModel = new DefaultListModel();
 		userList = new JList(userModel);
@@ -188,7 +188,7 @@ public class GUI extends JFrame implements ClientEventListener {
 						.addComponent(roomList, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
 							.addComponent(createRoomButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(roomNameImput, Alignment.LEADING)))
+							.addComponent(roomNameInput, Alignment.LEADING)))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
@@ -209,7 +209,7 @@ public class GUI extends JFrame implements ClientEventListener {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(roomList, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(roomNameImput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(roomNameInput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addComponent(userList, GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
@@ -242,7 +242,7 @@ public class GUI extends JFrame implements ClientEventListener {
 					userModel.clear();
 					roomModel.clear();
 					textArea.setText("");
-					roomNameImput.setText("");
+					roomNameInput.setText("");
 					createRoomButton.setSelected(true);
 					createRoomButton.setText("Leave");
 					client.sendMessage(new Command(Command.CommandType.USERS));
