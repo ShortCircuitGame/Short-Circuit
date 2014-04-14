@@ -20,6 +20,7 @@ import shortcircuit.shared.Command;
 import shortcircuit.shared.Command.CommandType;
 import shortcircuit.shared.Game;
 import shortcircuit.shared.Player;
+import resources.img.*;
 
 public class Skeleton extends JFrame {
 
