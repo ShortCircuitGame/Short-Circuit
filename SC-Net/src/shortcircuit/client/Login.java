@@ -26,12 +26,19 @@ public class Login extends JDialog implements ClientEventListener {
     private JPasswordField passwordField;
     private ShortCircuitClient client;
     private JLabel lblMessage;
-
-    public static void main(String[] args) {
+    private String serverName;
+    
+    public static void main(final String[] args) {
 	EventQueue.invokeLater(new Runnable() {
 	    public void run() {
 		try {
-		    Login dialog = new Login();
+		    Login dialog;
+			if(args.length > 0){
+				dialog = new Login(args[0]);
+			}else{
+				dialog = new Login("localhost");
+			}
+		    
 		    dialog.setModal(true);
 		    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		    dialog.setVisible(true);
@@ -42,8 +49,9 @@ public class Login extends JDialog implements ClientEventListener {
 	});
     }
 
-    public Login() {
-	this.client = new ShortCircuitClient();
+    public Login(String hostname) {
+	this.client = new ShortCircuitClient(hostname);
+	this.serverName = hostname;
 	this.client.start();
 	this.client.addListener(this);
 
@@ -148,7 +156,7 @@ public class Login extends JDialog implements ClientEventListener {
 			    lblMessage.setText("ERROR!");
 			}
 			client.removeListenet(Login.this);
-			client = new ShortCircuitClient();
+			client = new ShortCircuitClient(serverName);
 			client.start();
 			client.addListener(Login.this);
 		    }

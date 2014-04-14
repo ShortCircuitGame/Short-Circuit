@@ -17,17 +17,18 @@ public class ShortCircuitClient extends Thread {
 	private PrintWriter out;
 	private ArrayList<ClientEventListener> listeners;
 	private String username;
-
-	public ShortCircuitClient() {
+	private String serverAddress;
+	public ShortCircuitClient(String hostname) {
 		this.sim = new Simulator(0, 0, null);
 		this.listeners = new ArrayList<ClientEventListener>();
+		
+		serverAddress = "localhost";
 	}
 
 	public void run() {
-		String hostName = "localhost";
+		
 		int portNumber = 8970;
-
-		try (Socket socket = new Socket(hostName, portNumber);
+		try (Socket socket = new Socket(serverAddress, portNumber);
 				PrintWriter out = new PrintWriter(socket.getOutputStream(),
 						true);
 				BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -43,10 +44,10 @@ public class ShortCircuitClient extends Thread {
 
 			}
 		} catch (UnknownHostException e) {
-			System.err.println("Don't know about host " + hostName);
+			System.err.println("Don't know about host " + serverAddress);
 		} catch (IOException e) {
 			System.err.println("Couldn't get I/O for the connection to "
-					+ hostName);
+					+ serverAddress);
 		}
 	}
 
