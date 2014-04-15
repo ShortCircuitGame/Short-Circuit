@@ -144,7 +144,7 @@ public class Login extends JDialog implements ClientEventListener {
 	    public void run() {
 		try {
 		    if (command.command == Command.CommandType.SUCCESS) {			
-			client.removeListenet(Login.this);
+			client.removeListener(Login.this);
 			client.setUsername(textField.getText());
 			GUI frame = new GUI(client);
 			frame.setVisible(true);
@@ -155,7 +155,7 @@ public class Login extends JDialog implements ClientEventListener {
 			} else {
 			    lblMessage.setText("ERROR!");
 			}
-			client.removeListenet(Login.this);
+			client.removeListener(Login.this);
 			client = new ShortCircuitClient(serverName);
 			client.start();
 			client.addListener(Login.this);

@@ -67,7 +67,7 @@ public class ShortCircuitClient extends Thread {
 		}
 	}
 
-	public void removeListenet(ClientEventListener listener) {
+	public void removeListener(ClientEventListener listener) {
 		listeners.remove(listener);
 	}
 
