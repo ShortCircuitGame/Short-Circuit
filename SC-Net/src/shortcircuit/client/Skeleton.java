@@ -68,6 +68,9 @@ public class Skeleton extends JFrame {
 	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	setLocationRelativeTo(null);
 	setSize(100, 100);
+	
+	this.setTitle(this.client.getUsername());
+	
 	pack();
     }
 

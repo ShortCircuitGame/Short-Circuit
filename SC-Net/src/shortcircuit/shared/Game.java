@@ -11,7 +11,7 @@ public class Game {
     /* Parameters for the game */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 45;
-    public static final int MAX_PLAYERS = 3;
+    public static final int MAX_PLAYERS = 4;
 
     public static final String COMA = ",";
     public int seed;

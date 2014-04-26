@@ -223,6 +223,8 @@ public class GUI extends JFrame implements ClientEventListener {
 
 		client.sendMessage(new Command(Command.CommandType.ROOMS));
 		client.sendMessage(new Command(Command.CommandType.USERS));
+		
+		this.setTitle(this.client.getUsername());
 	}
 
 	@Override
