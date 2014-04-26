@@ -11,7 +11,7 @@ public class Game {
     /* Parameters for the game */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 45;
-    public static final int MAX_PLAYERS = 4;
+    public static final int MAX_PLAYERS = 2;
 
     public static final String COMA = ",";
     public int seed;
@@ -48,13 +48,15 @@ public class Game {
 	}
     }
 
-    public boolean execute(int id, CommandType command) {
+    public int execute(int id, CommandType command) {
 	if (id != currentTurn) {
-	    return false;
+	    return 1;
 	} else {
-	    this.players.get(id).execute(command);
-	    nextTurn();
-	    return true;
+	    if(this.players.get(id).execute(command)){
+		nextTurn();
+		return 2;
+	    }
+	    return 3;
 	}
     }
 

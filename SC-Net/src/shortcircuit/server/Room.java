@@ -80,7 +80,7 @@ public class Room {
 	int i = 0;
 	ArrayList<Player> players = new ArrayList<Player>();
 	this.clients = new ArrayList<Client>();
-	
+
 	Random random = new Random();
 	for (String key : members.keySet()) {
 	    Client client = members.get(key);
@@ -93,21 +93,27 @@ public class Room {
     }
 
     public void runCommand(int id, CommandType command) {
-	if(this.game != null && this.game.execute(id, command)){
+	if (this.game != null) {
+	    int result = this.game.execute(id, command);
+	    if (result == 1) {
+		return;
+	    }
 	    this.broadcastCommand(new Command(command, Integer.toString(id)));
-	    notifyTurn(this.game.currentTurn);
+	    if(result == 2){
+		notifyTurn(this.game.currentTurn);
+	    }
 	}
     }
 
     public void notifyTurn(int id) {
-	    clients.get(id).sendCommand(new Command(CommandType.TURN));
+	clients.get(id).sendCommand(new Command(CommandType.TURN));
     }
-    
-    public Game getGame(){
+
+    public Game getGame() {
 	return this.game;
     }
 
     public void stopGame() {
-	this.game = null;	
+	this.game = null;
     }
 }
