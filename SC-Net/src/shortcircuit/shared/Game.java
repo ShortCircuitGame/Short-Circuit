@@ -9,8 +9,8 @@ import shortcircuit.shared.Command.CommandType;
 public class Game {
 
     /* Parameters for the game */
-    public static final int WIDTH = 80;
-    public static final int HEIGHT = 45;
+    public static final int WIDTH = 25;
+    public static final int HEIGHT = 25;
     public static final int MAX_PLAYERS = 2;
 
     public static final String COMA = ",";
@@ -43,19 +43,22 @@ public class Game {
 	int mod = 0;
 	for (int i = 0; i < WIDTH; i++) {
 	    for (int j = 0; j < HEIGHT; j++) {
-		map[j][i] = (int) (rnd.nextInt(255));
+		map[j][i] = (int) (rnd.nextInt(5));
 	    }
 	}
     }
 
     public int execute(int id, CommandType command) {
 	if (id != currentTurn) {
+	    System.out.println(id + ": Illegal action");
 	    return 1;
 	} else {
 	    if(this.players.get(id).execute(command)){
+		System.out.println(id + ": Player turn end");
 		nextTurn();
 		return 2;
 	    }
+	    System.out.println(id + ": Player action");
 	    return 3;
 	}
     }

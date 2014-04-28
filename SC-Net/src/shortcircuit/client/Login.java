@@ -5,7 +5,11 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -27,18 +31,18 @@ public class Login extends JDialog implements ClientEventListener {
     private ShortCircuitClient client;
     private JLabel lblMessage;
     private String serverName;
-    
+
     public static void main(final String[] args) {
 	EventQueue.invokeLater(new Runnable() {
 	    public void run() {
 		try {
 		    Login dialog;
-			if(args.length > 0){
-				dialog = new Login(args[0]);
-			}else{
-				dialog = new Login("localhost");
-			}
-		    
+		    if (args.length > 0) {
+			dialog = new Login(args[0]);
+		    } else {
+			dialog = new Login("localhost");
+		    }
+
 		    dialog.setModal(true);
 		    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		    dialog.setVisible(true);
@@ -49,7 +53,8 @@ public class Login extends JDialog implements ClientEventListener {
 	});
     }
 
-    public Login(String hostname) {
+    public Login(String hostname) throws IOException {
+		
 	this.client = new ShortCircuitClient(hostname);
 	this.serverName = hostname;
 	this.client.start();
@@ -143,7 +148,7 @@ public class Login extends JDialog implements ClientEventListener {
 	EventQueue.invokeLater(new Runnable() {
 	    public void run() {
 		try {
-		    if (command.command == Command.CommandType.SUCCESS) {			
+		    if (command.command == Command.CommandType.SUCCESS) {
 			client.removeListener(Login.this);
 			client.setUsername(textField.getText());
 			GUI frame = new GUI(client);

@@ -8,8 +8,12 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.DefaultFocusManager;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -20,17 +24,46 @@ import shortcircuit.shared.Command;
 import shortcircuit.shared.Command.CommandType;
 import shortcircuit.shared.Game;
 import shortcircuit.shared.Player;
-import resources.img.*;
 
 public class Skeleton extends JFrame {
 
     private ShortCircuitClient client;
     private Game game;
 
+    private BufferedImage dirt;
+    private BufferedImage grass;
+    private BufferedImage mountain;
+    private BufferedImage rock;
+    private BufferedImage water;
+    
+    private BufferedImage bio;
+    private BufferedImage mecha;
+    private BufferedImage protoss;
+    
+    private int tileWidth;
+    private int tileHeight;
+    
     public Skeleton(ShortCircuitClient client, String game) {
 	this.client = client;
 	this.game = new Game(game);
 	initUI();
+	
+	try {
+	    dirt = ImageIO.read(new File("resources/img/terrian/dirt.png"));
+	    grass = ImageIO.read(new File("resources/img/terrian/grass.png"));
+	    mountain = ImageIO.read(new File("resources/img/terrian/mountains.png"));
+	    rock = ImageIO.read(new File("resources/img/terrian/rock.png"));
+	    water = ImageIO.read(new File("resources/img/terrian/water.png"));
+	    
+	    bio = ImageIO.read(new File("resources/img/actors/bio.png"));
+	    mecha = ImageIO.read(new File("resources/img/actors/mecha.png"));
+	    protoss = ImageIO.read(new File("resources/img/actors/protoss.png"));
+	    
+	    this.tileHeight = dirt.getHeight();
+	    this.tileWidth = dirt.getWidth();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
     }
 
     private void initUI() {
@@ -81,36 +114,45 @@ public class Skeleton extends JFrame {
 
 	private void doDrawing(Graphics g) {
 	    Graphics2D g2d = (Graphics2D) g;
-	    double width = (double) this.getWidth() / (double) map[0].length;
-	    double height = (double) this.getHeight() / (double) map.length;
+	    int width = this.getWidth() / map[0].length;
+	    int height = this.getHeight() / map.length;
 	    int color;
 	    for (int i = 0; i < map[0].length; i++) {
 		for (int j = 0; j < map.length; j++) {
-		    color = (map[j][i]);
-		    g2d.setColor(new Color(color, color, color));
-		    g2d.fill(new Rectangle2D.Double((double) i * width, (double) j * height, width, height));
+		    switch (map[j][i]) {
+		    case 0:
+			g2d.drawImage(water, i * width, j * height, i * width + width, j * height + height, 0, 0, tileWidth, tileHeight, null);
+			break;
+		    case 1:
+			g2d.drawImage(dirt, i * width, j * height, i * width + width, j * height + height, 0, 0, tileWidth, tileHeight, null);
+			break;
+		    case 2:
+			g2d.drawImage(grass, i * width, j * height, i * width + width, j * height + height, 0, 0, tileWidth, tileHeight, null);
+			break;
+		    case 3:
+			g2d.drawImage(mountain, i * width, j * height, i * width + width, j * height + height, 0, 0, tileWidth, tileHeight, null);
+			break;
+		    case 4:
+			g2d.drawImage(rock, i * width, j * height, i * width + width, j * height + height, 0, 0, tileWidth, tileHeight, null);
+			break;
+		    }
 		}
 	    }
 	    for (int i = 0; i < players.size(); i++) {
 		Color pColor = null;
 		switch (i) {
 		case 0:
-		    pColor = Color.RED;
+		    g2d.drawImage(bio, players.get(i).x * width + 2, players.get(i).y * height + 2, players.get(i).x * width + width - 2, players.get(i).y * height + height - 2, 0, 0, tileWidth, tileHeight, null);
 		    break;
 		case 1:
-		    pColor = Color.BLUE;
+		    g2d.drawImage(mecha, players.get(i).x * width + 2, players.get(i).y * height + 2, players.get(i).x * width + width - 2, players.get(i).y * height + height - 2, 0, 0, tileWidth, tileHeight, null);
 		    break;
 		case 2:
-		    pColor = Color.YELLOW;
-		    break;
-		case 3:
-		    pColor = Color.GREEN;
+		    g2d.drawImage(protoss, players.get(i).x * width + 2, players.get(i).y * height + 2, players.get(i).x * width + width - 2, players.get(i).y * height + height - 2, 0, 0, tileWidth, tileHeight, null);
 		    break;
 		default:
 		    break;
 		}
-		g2d.setColor(pColor);
-		g2d.fill(new Ellipse2D.Double((double) players.get(i).x * width, (double) players.get(i).y * height, width, height));
 	    }
 	}
 
