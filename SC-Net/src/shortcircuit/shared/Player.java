@@ -52,13 +52,13 @@ public class Player {
 	    {
 	    	health --;
 	    }
-	    else if (command == CommandType.RATTACK){
+	}else if (command == CommandType.RATTACK){
 		    this.game.getPlayers();
 		    if(this.health > 0)
 		    {
 		    	health --;	
 		    }
-	    }
+	    
     }
 	
 	return false;
