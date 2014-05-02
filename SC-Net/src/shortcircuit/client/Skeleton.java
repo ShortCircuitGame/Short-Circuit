@@ -3,18 +3,14 @@ package shortcircuit.client;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.swing.DefaultFocusManager;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JFrame;
@@ -70,30 +66,42 @@ public class Skeleton extends JFrame {
 
 	JPanel panel = new Surface();
 
-	KeyEventDispatcher myKeyEventDispatcher = new DefaultFocusManager();
-	KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {    
-	    @Override
-	    public boolean dispatchKeyEvent(KeyEvent e) {
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_LEFT:
-		    client.sendMessage(new Command(CommandType.LEFT));
-		    break;
-		case KeyEvent.VK_RIGHT:
-		    client.sendMessage(new Command(CommandType.RIGHT));
-		    break;
-		case KeyEvent.VK_UP:
-		    client.sendMessage(new Command(CommandType.UP));
-		    break;
-		case KeyEvent.VK_DOWN:
-		    client.sendMessage(new Command(CommandType.DOWN));
-		    break;
-		default:
-		    break;
-		}
-		return false;
-	    }
-	});
+	panel.addKeyListener(new KeyListener() {
 
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+    		switch (e.getKeyCode()) {
+    		case KeyEvent.VK_LEFT:
+    		    client.sendMessage(new Command(CommandType.LEFT));
+    		    break;
+    		case KeyEvent.VK_RIGHT:
+    		    client.sendMessage(new Command(CommandType.RIGHT));
+    		    break;
+    		case KeyEvent.VK_UP:
+    		    client.sendMessage(new Command(CommandType.UP));
+    		    break;
+    		case KeyEvent.VK_DOWN:
+    		    client.sendMessage(new Command(CommandType.DOWN));
+    		    break;
+    		default:
+    		    break;
+    		}
+
+        }
+    });
+
+	
+	panel.setFocusable(true);
+    panel.requestFocusInWindow();
+    
 	GroupLayout groupLayout = new GroupLayout(getContentPane());
 	groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addComponent(panel, GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE));
 	groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addComponent(panel, GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE));
