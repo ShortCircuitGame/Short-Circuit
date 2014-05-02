@@ -134,7 +134,8 @@ public class Client {
 	case DOWN:
 	case LEFT:
 	case RIGHT:
-	case ATTACK:
+	case MATTACK:
+	case RATTACK:
 	    this.thread.getRoom().runCommand(id, command.command);
 	    break;
 	default:

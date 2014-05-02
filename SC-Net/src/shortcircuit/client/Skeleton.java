@@ -152,7 +152,7 @@ public class Skeleton extends JFrame {
 	    }
 	    for (int i = 0; i < players.size(); i++) {
 		Color pColor = null;
-		switch (i) {
+		switch (i) { 
 		case 0:
 		    g2d.drawImage(bio, players.get(i).x * width + 2, players.get(i).y * height + 2, players.get(i).x * width + width - 2, players.get(i).y * height + height - 2, 0, 0, tileWidth, tileHeight, null);
 		    break;
