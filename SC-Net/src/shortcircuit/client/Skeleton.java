@@ -151,7 +151,7 @@ public class Skeleton extends JFrame {
 		}
 	    }
 	    for (int i = 0; i < players.size(); i++) {
-		Color pColor = null;
+		Color pColor = new Color(0, 255, 255);
 		switch (i) { 
 		case 0:
 		    g2d.drawImage(bio, players.get(i).x * width - 2, players.get(i).y * height + 2, players.get(i).x * width + width + 2, players.get(i).y * height + height + 2, 0, 0, tileWidth, tileHeight, null);
@@ -165,6 +165,8 @@ public class Skeleton extends JFrame {
 		default:
 		    break;
 		}
+		g2d.setColor(pColor);
+	    g2d.fillRect(players.get(i).x * width - 2, players.get(i).y * height + 2, (int)(width * ((float)players.get(i).health / (float)Player.MAX_HEALTH)) , height / 6);
 	    }
 	}
 
