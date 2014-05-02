@@ -110,8 +110,8 @@ public class Client {
 		break;
 	    }
 	    if (this.thread.getRoom().getMemberList().size() != Game.MAX_PLAYERS) {
-		System.out.println("You need 4 people to start a game");
-		sendCommand(new Command(Command.CommandType.FAILURE, "You need 4 people to start a game"));
+		System.out.println("You need " + Game.MAX_PLAYERS + " people to start a game");
+		sendCommand(new Command(Command.CommandType.FAILURE, "You need " + Game.MAX_PLAYERS + " people to start a game"));
 		break;
 	    }
 	    if (this.thread.getRoom().startGame(this)) {
