@@ -45,18 +45,18 @@ public class Player {
 		x++;
 	    }
 	} else if (command == CommandType.MATTACK) {
-    this.game.getPlayers();
-    if(this.health > 0)
-    {
-     health --;
-    }
-    else if (command == CommandType.RATTACK){
-    this.game.getPlayers();
-    if(this.health > 0)
-    {
-    health --;	
-    }
-    }
+	    this.game.getPlayers();
+	    if(this.health > 0)
+	    {
+	    	health --;
+	    }
+	    else if (command == CommandType.RATTACK){
+		    this.game.getPlayers();
+		    if(this.health > 0)
+		    {
+		    	health --;	
+		    }
+	    }
     }
 	
 	return false;

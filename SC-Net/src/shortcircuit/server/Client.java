@@ -75,12 +75,12 @@ public class Client {
 	    if (this.thread.getRoom() != ShortCircuitServer.getGetLobby()) {
 		command.message = this.username;
 		this.thread.getRoom().broadcastCommand(command);
+		this.thread.getRoom().removeMember(this);
 		if (this.thread.getRoom().isEmpty() || this == this.thread.getRoom().getAdmin()) {
 		    this.thread.getRoom().broadcastCommand(new Command(Command.CommandType.KICK));
 		    ShortCircuitServer.removeRoom(this.thread.getRoom().getRoomName());
 		    ShortCircuitServer.getGetLobby().broadcastCommand(new Command(Command.CommandType.ROOMDESTROY, this.thread.getRoom().getRoomName()));
 		}
-		this.thread.getRoom().removeMember(this);
 		this.thread.setRoom(ShortCircuitServer.getGetLobby());
 		this.thread.getRoom().addMember(this);
 		this.thread.getRoom().broadcastCommand(new Command(Command.CommandType.OTHERJOIN, this.username), this);

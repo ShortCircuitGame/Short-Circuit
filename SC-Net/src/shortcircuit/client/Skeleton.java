@@ -112,7 +112,7 @@ public class Skeleton extends JFrame {
 	getContentPane().setLayout(groupLayout);
 	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	setLocationRelativeTo(null);
-	setSize(100, 100);
+	setSize(800, 800);
 	
 	this.setTitle(this.client.getUsername());
 	
@@ -154,13 +154,13 @@ public class Skeleton extends JFrame {
 		Color pColor = null;
 		switch (i) { 
 		case 0:
-		    g2d.drawImage(bio, players.get(i).x * width + 2, players.get(i).y * height + 2, players.get(i).x * width + width - 2, players.get(i).y * height + height - 2, 0, 0, tileWidth, tileHeight, null);
+		    g2d.drawImage(bio, players.get(i).x * width - 2, players.get(i).y * height + 2, players.get(i).x * width + width + 2, players.get(i).y * height + height + 2, 0, 0, tileWidth, tileHeight, null);
 		    break;
 		case 1:
-		    g2d.drawImage(mecha, players.get(i).x * width + 2, players.get(i).y * height + 2, players.get(i).x * width + width - 2, players.get(i).y * height + height - 2, 0, 0, tileWidth, tileHeight, null);
+		    g2d.drawImage(mecha, players.get(i).x * width - 2, players.get(i).y * height + 2, players.get(i).x * width + width + 2, players.get(i).y * height + height + 2, 0, 0, tileWidth, tileHeight, null);
 		    break;
 		case 2:
-		    g2d.drawImage(protoss, players.get(i).x * width + 2, players.get(i).y * height + 2, players.get(i).x * width + width - 2, players.get(i).y * height + height - 2, 0, 0, tileWidth, tileHeight, null);
+		    g2d.drawImage(protoss, players.get(i).x * width - 2, players.get(i).y * height + 2, players.get(i).x * width + width + 2, players.get(i).y * height + height + 2, 0, 0, tileWidth, tileHeight, null);
 		    break;
 		default:
 		    break;

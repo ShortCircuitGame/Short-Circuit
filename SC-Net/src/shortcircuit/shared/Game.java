@@ -9,8 +9,8 @@ import shortcircuit.shared.Command.CommandType;
 public class Game {
 
     /* Parameters for the game */
-    public static final int WIDTH = 25;
-    public static final int HEIGHT = 25;
+    public static final int WIDTH = 15;
+    public static final int HEIGHT = 15;
     public static final int MAX_PLAYERS = 3;
 
     public static final String COMA = ",";
