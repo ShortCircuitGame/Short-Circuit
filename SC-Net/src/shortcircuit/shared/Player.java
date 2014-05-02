@@ -9,6 +9,7 @@ public class Player {
     private int id;
     private int direction;
     private int stamina = 5;
+    private int health = 10;
     
     private Game game;
     
@@ -43,9 +44,21 @@ public class Player {
 	    if (x < Game.WIDTH - 1 && this.game.map[y][x + 1] <= 3) {
 		x++;
 	    }
-	} else if (command == CommandType.ATTACK) {
-
-	}
+	} else if (command == CommandType.MATTACK) {
+    this.game.getPlayers();
+    if(this.health > 0)
+    {
+     health --;
+    }
+    else if (command == CommandType.RATTACK){
+    this.game.getPlayers();
+    if(this.health > 0)
+    {
+    health --;	
+    }
+    }
+    }
+	
 	return false;
     }
 }
