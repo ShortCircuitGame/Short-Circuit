@@ -5,21 +5,25 @@ import shortcircuit.shared.Command.CommandType;
 
 public class Player {
 	public static final int MAX_HEALTH = 10;
+	public static final int MAX_STAMINA = 10;
 	
     public int x; // X position on the map
     public int y; // Y position on the map
     private int id;
     private int direction;
-    private int stamina = 5;
+    public String name;
+    private int stamina = MAX_STAMINA;
     public int health = MAX_HEALTH;
+    public boolean alive = true;
     
     private Game game;
     
-    public Player(int x, int y, int id, Game game) {
+    public Player(int x, int y, int id, Game game, String name) {
 	this.x = x;
 	this.y = y;
 	this.id = id;
 	this.game = game;
+	this.name = name;
     }
 
     public boolean execute(CommandType command) {
@@ -90,11 +94,11 @@ public class Player {
 	    }
     }
 
-	if(this.stamina > 0){
+	if(this.stamina > 1){
 	    this.stamina--;
 	    return false;
 	}else{
-	    this.stamina = 5;
+	    this.stamina = MAX_STAMINA;
 	    return true;
 	}
     }

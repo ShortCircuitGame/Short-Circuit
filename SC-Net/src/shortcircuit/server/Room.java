@@ -86,7 +86,7 @@ public class Room {
 	    Client client = members.get(key);
 	    client.setId(i);
 	    this.clients.add(client);
-	    players.add(new Player(random.nextInt(Game.WIDTH), random.nextInt(Game.HEIGHT), i, game));
+	    players.add(new Player(random.nextInt(Game.WIDTH), random.nextInt(Game.HEIGHT), i, game, client.getUsername()));
 	    i++;
 	}
 	this.game.setPlayers(players);

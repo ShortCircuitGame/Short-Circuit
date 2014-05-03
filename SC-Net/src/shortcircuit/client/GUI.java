@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
@@ -29,6 +30,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import shortcircuit.shared.Command;
+import shortcircuit.shared.Player;
 
 public class GUI extends JFrame implements ClientEventListener {
 
@@ -310,8 +312,18 @@ public class GUI extends JFrame implements ClientEventListener {
 				case RIGHT:
 				case MATTACK:
 				case RATTACK:
-				    window.getGame().getPlayers().get(Integer.parseInt(command.message)).execute(command.command);
+					ArrayList<Player> players = window.getGame().getPlayers();
+				    players.get(Integer.parseInt(command.message)).execute(command.command);
+				    for (int i=0; i < players.size(); i++){
+						if(players.get(i).health <= 0){
+							players.get(i).alive = false;
+						}
+					}
 				    window.repaint();
+
+				    if(window.getGame().getWinner() != -1){
+				    	window.dispose();
+				    }
 				    break;
 				case TURN:
 					JOptionPane.showMessageDialog(GUI.this, "It is your turn!");
