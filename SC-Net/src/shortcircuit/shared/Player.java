@@ -23,28 +23,34 @@ public class Player {
     }
 
     public boolean execute(CommandType command) {
-	if(this.stamina > 0){
-	    this.stamina--;
-	}else{
-	    this.stamina = 5;
-	    return true;
-	}
 	System.out.println(id + " did action " + command.toString());
 	if (command == CommandType.UP) {
 	    if (y > 0 && this.game.map[y - 1][x] <= 3) {
-		y--;
+			if(this.game.map[y - 1][x] == 0){
+				stamina--;
+			}
+			y--;
 	    }
 	} else if (command == CommandType.LEFT ) {
 	    if (x > 0 && this.game.map[y][x - 1] <= 3) {
+			if(this.game.map[y][x - 1] == 0){
+				stamina--;
+			}
 		x--;
 	    }
 	} else if (command == CommandType.DOWN) {
 	    if (y < Game.HEIGHT - 1 && this.game.map[y + 1][x] <= 3) {
+			if(this.game.map[y + 1][x] == 0){
+				stamina--;
+			}
 		y++;
 	    }
 	} else if (command == CommandType.RIGHT) {
 	    if (x < Game.WIDTH - 1 && this.game.map[y][x + 1] <= 3) {
-		x++;
+			if(this.game.map[y][x + 1] == 0){
+				stamina--;
+			}
+			x++;
 	    }
 	} else if (command == CommandType.MATTACK) {
 	    this.game.getPlayers();
@@ -60,7 +66,13 @@ public class Player {
 		    }
 	    
     }
-	
-	return false;
+
+	if(this.stamina > 0){
+	    this.stamina--;
+	    return false;
+	}else{
+	    this.stamina = 5;
+	    return true;
+	}
     }
 }
