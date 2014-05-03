@@ -53,30 +53,32 @@ public class Player {
 			x++;
 	    }
 	} else if (command == CommandType.MATTACK) {
-		this.game.getPlayers();
 	    for(int i = 0; i < this.game.getPlayers().size(); i++)
 	    {
 	    	Player player = this.game.getPlayers().get(i);
+	    	
 	    	if(player == this)
 	    		continue;
-	    	if(this.x ==  player.x  && this.y == player.y)
+	    	
+	    	if(Math.abs(this.x - player.x) < 2 && Math.abs(this.y - player.y) < 2 
+	    			&& (this.x ==  player.x  || this.y == player.y))
 	    	{
+	    		
 	    		  if(player.health > 0)
 	  		    {
-	  		    	player.health --;	
+	  		    	player.health -= 3;	
 	  		    }
 	  	    
 	    	}
 	    }	    
 	}else if (command == CommandType.RATTACK){
-		this.game.getPlayers();
 	    for(int i = 0; i < this.game.getPlayers().size(); i++)
 	    {
 	    	Player player = this.game.getPlayers().get(i);
 	    	if(player == this)
 	    		continue;
 	    	
-	    	if(Math.abs(this.x - player.x) < 3 && Math.abs(this.y - player.y) < 3 
+	    	if(Math.abs(this.x - player.x) < 5 && Math.abs(this.y - player.y) < 5 
 	    			&& (this.x ==  player.x  || this.y == player.y))
 	    	{
 	    		if(player.health > 0)

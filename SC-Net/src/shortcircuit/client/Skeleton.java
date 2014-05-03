@@ -93,8 +93,10 @@ public class Skeleton extends JFrame {
     		    break;
     		case KeyEvent.VK_M:
     			client.sendMessage(new Command(CommandType.MATTACK));
+    			break;
     		case KeyEvent.VK_R:
     			client.sendMessage(new Command(CommandType.RATTACK));
+    			break;
     		default:
     		    break;
     		}
