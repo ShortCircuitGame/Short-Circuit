@@ -47,18 +47,39 @@ public class Player {
 		x++;
 	    }
 	} else if (command == CommandType.MATTACK) {
-	    this.game.getPlayers();
-	    if(this.health > 0)
+		this.game.getPlayers();
+	    for(int i = 0; i < this.game.getPlayers().size(); i++)
 	    {
-	    	health --;
-	    }
+	    	Player player = this.game.getPlayers().get(i);
+	    	if(player == this)
+	    		continue;
+	    	if(this.x ==  player.x  && this.y == player.y)
+	    	{
+	    		  if(player.health > 0)
+	  		    {
+	  		    	player.health --;	
+	  		    }
+	  	    
+	    	}
+	    }	    
 	}else if (command == CommandType.RATTACK){
-		    this.game.getPlayers();
-		    if(this.health > 0)
-		    {
-		    	health --;	
-		    }
-	    
+		this.game.getPlayers();
+	    for(int i = 0; i < this.game.getPlayers().size(); i++)
+	    {
+	    	Player player = this.game.getPlayers().get(i);
+	    	if(player == this)
+	    		continue;
+	    	
+	    	if(Math.abs(this.x - player.x) < 3 && Math.abs(this.y - player.y) < 3 
+	    			&& (this.x ==  player.x  || this.y == player.y))
+	    	{
+	    		if(player.health > 0)
+	  		    {
+	  		    	player.health --;	
+	  		    }
+	  	    
+	    	}
+	    }
     }
 	
 	return false;
