@@ -21,7 +21,8 @@ public class Game {
     private ArrayList<Player> players; // List that holds a reference for each
 				       // client    
     public Game() {
-	seed = 100;
+    rnd = new Random();
+	seed = rnd.nextInt();
 	players = new ArrayList<Player>();
 	generateMap();
     }
@@ -32,7 +33,7 @@ public class Game {
 	seed = scan.nextInt();
 	players = new ArrayList<Player>();
 	for(int i = 0; i < MAX_PLAYERS; i++){
-	    players.add(new Player(scan.nextInt(), scan.nextInt(), 0, this));
+	    players.add(new Player(scan.nextInt(), scan.nextInt(), 0, this, scan.next()));
 	}
 	generateMap();
     }
@@ -53,22 +54,56 @@ public class Game {
 	    System.out.println(id + ": Illegal action");
 	    return 1;
 	} else {
-	    if(this.players.get(id).execute(command)){
+		boolean action = this.players.get(id).execute(command);
+		for (int i=0; i < this.players.size(); i++){
+			if(this.players.get(i).health <= 0){
+				this.players.get(i).alive = false;
+			}
+		}
+	    if(action){
 		System.out.println(id + ": Player turn end");
 		nextTurn();
 		return 2;
 	    }
 	    System.out.println(id + ": Player action");
 	    return 3;
-	}
+	}	
     }
 
     private void nextTurn() {
-	if (currentTurn >= MAX_PLAYERS - 1) {
+	if (currentTurn >= players.size() - 1) {
 	    currentTurn = 0;
 	} else {
 	    currentTurn++;
 	}
+	
+	int deaths = 0;
+	for(int i = 0; i < players.size(); i++){
+		if(!players.get(i).alive){
+			deaths++;
+		}
+	}
+	if(deaths == players.size()){
+		return;
+	}else if(!players.get(currentTurn).alive){
+		nextTurn();
+	}
+    }
+    
+    public int getWinner(){
+    	int alive = 0;
+    	int winnerIndex = -1;
+    	for(int i = 0; i < players.size(); i++){
+    		if(players.get(i).alive){
+    			alive++;
+    			winnerIndex = i;
+    		}
+    	}
+    	if(alive == 1){
+    		return winnerIndex;
+    	}else{
+    		return -1;
+    	}
     }
     
     public void setPlayers(ArrayList<Player> players){
@@ -89,6 +124,7 @@ public class Game {
 	for(int i = 0; i < MAX_PLAYERS; i++){
 	    builder.append(players.get(i).x + COMA);
 	    builder.append(players.get(i).y + COMA);
+	    builder.append(players.get(i).name + COMA);
 	}
 	return builder.toString();
     }

@@ -137,6 +137,11 @@ public class Client {
 	case MATTACK:
 	case RATTACK:
 	    this.thread.getRoom().runCommand(id, command.command);
+	    int winner = this.thread.getRoom().getGame().getWinner();
+	    if(winner != -1){
+	    	this.thread.getRoom().broadcastCommand(new Command(Command.CommandType.CHAT, "Player " +
+	    				this.thread.getRoom().getGame().getPlayers().get(winner).name + " won"));
+	    }
 	    break;
 	default:
 	    ShortCircuitServer.getSim().executeCommand(command);
