@@ -13,7 +13,7 @@ public class ShortCircuitServer {
 	private static Hashtable<String, Room> roomList;
 	private static boolean listening;
 	private static Simulator sim;
-
+/* main method to run the server itself, sets port number, ip and binds the server socket  and listens */
 	public static void main(String[] args) throws IOException {
 
 		int portNumber = 8970;
@@ -39,33 +39,33 @@ public class ShortCircuitServer {
 			System.exit(-1);
 		}
 	}
-
+/* getter method for lobby */
 	public static Room getGetLobby() {
 		return lobby;
 	}
-
+/* hashtable for room */
 	public static Hashtable<String, Room> getRoomList() {
 		return roomList;
 	}
-
+/* getter method for room */
 	public static Room getRoom(String key) {
 		return roomList.get(key);
 	}
-
+/* getter method for authenticator */
 	public static Authenticator getAuthenticator() {
 		return authenticator;
 	}
-
+/* static room creator */
 	public static Room createRoom(String roomName, Client admin) {
 		Room room = new Room(roomName, admin);
 		roomList.put(roomName, room);
 		return room;
 	}
-	
+/* static remove room method */	
 	public static void removeRoom(String roomName) {
 		roomList.remove(roomName);
 	}
-
+/* get simulator method */
 	public static Simulator getSim() {
 		return sim;
 	}

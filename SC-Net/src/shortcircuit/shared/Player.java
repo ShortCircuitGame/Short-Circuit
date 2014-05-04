@@ -17,7 +17,8 @@ public class Player {
     public boolean alive = true;
     
     private Game game;
-    
+  
+    /* player constructor, it retrieves their x and y coordinates, their id, name and game that they are in */
     public Player(int x, int y, int id, Game game, String name) {
 	this.x = x;
 	this.y = y;
@@ -26,6 +27,13 @@ public class Player {
 	this.name = name;
     }
 
+    /* Method used to execute player commands. Each command has separate checks for what is done 
+     * if that key is pressed, for example, if up is pressed the stamina of the player will decrement by one.
+     * This method also contains the attack commands which decrement health (ranged decrements health by 1 and 
+     * melee decrements health by 3) which is the determining factor upon who wins the game based on who is the last
+     * to live.  There are also special cases for movement in which a player cannot move through rock terrain, 
+     * and a player takes twice as much stamina to move through water.  After the user has used up all their
+     * stamina it ends their turn and resets their stamina to max for the next turn. */
     public boolean execute(CommandType command) {
 	System.out.println(id + " did action " + command.toString());
 	if (command == CommandType.UP) {

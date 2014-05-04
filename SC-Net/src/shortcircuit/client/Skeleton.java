@@ -39,6 +39,8 @@ public class Skeleton extends JFrame {
     private int tileWidth;
     private int tileHeight;
     
+ /* Skeleton reads the image files for both the client sprites and the game tiles so that they can be drawn
+ * in the doDrawing method */  
     public Skeleton(ShortCircuitClient client, String game) {
 	this.client = client;
 	this.game = new Game(game);
@@ -61,7 +63,8 @@ public class Skeleton extends JFrame {
 	    e.printStackTrace();
 	}
     }
-
+/*Method used to override the values of what happens when a key is pressed. the Keys used in this program
+ * are as follows: Up Arrow, Down Arrow,Left Arrow, Right Arrow, M for Melee and R for Ranged */
     private void initUI() {
 
 	JPanel panel = new Surface();
@@ -126,6 +129,8 @@ public class Skeleton extends JFrame {
 	private int[][] map = game.map;
 	private ArrayList<Player> players = game.getPlayers();
 
+/*Do drawing method used to populate the map tiles, draw the user sprites 
+* and then redraw the user sprites on movement */
 	private void doDrawing(Graphics g) {
 	    Graphics2D g2d = (Graphics2D) g;
 	    int width = this.getWidth() / map[0].length;

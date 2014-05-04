@@ -2,6 +2,7 @@ package shortcircuit.shared;
 
 public class Command {
 
+	/* list of commands that are usable within the game itself */
     public static enum CommandType {
 	CREATE, JOIN, OTHERJOIN, JOINLOBBY, KICK, ROOMS, ROOMDESTROY, USERS, LEAVE, DISCONNECT, CHAT, START, STOP, NONE, SUCCESS, FAILURE, USERNAME, PASSWORD, SIGNUP, SIGNIN, TURN, UP, DOWN, LEFT, RIGHT, MATTACK,RATTACK
     };
@@ -10,6 +11,7 @@ public class Command {
     public CommandType command;
     public String message;
 
+    /* Constructor for command.  Checks if the commands used are valid or invalid commands by the user. */
     public Command(String input) {
 	try {
 	    this.command = CommandType.valueOf(input.split(Command.delimiter)[0].toUpperCase());
@@ -24,7 +26,7 @@ public class Command {
 	    System.err.println("Command recieved is not correctly formatted");
 	}
     }
-
+/* Constructor that converts the client's ,essage to a string. */
     public Command(CommandType type, String message) {
 	this.command = type;
 	if (message.isEmpty()) {
@@ -33,16 +35,16 @@ public class Command {
 	    this.message = message;
 	}
     }
-
+/* Simplified version of constructor above */
     public Command(CommandType type) {
 	this.command = type;
 	this.message = "-";
     }
-
+/* to string method for command */
     public String toString() {
 	return command.toString() + delimiter + message;
     }
-
+/* setter method for message */
     public void setMessage(String message) {
 	this.message = message;
     }

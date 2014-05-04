@@ -24,7 +24,8 @@ public class ShortCircuitClient extends Thread {
 		
 		serverAddress = "localhost";
 	}
-
+/* used to setup connection with host 
+* (initially set to localhost, can be changed in config while running server) */
 	public void run() {
 		
 		int portNumber = 8970;
@@ -50,31 +51,31 @@ public class ShortCircuitClient extends Thread {
 					+ serverAddress);
 		}
 	}
-
+/* Used to Send commands directly to the server to distribute */
 	public void sendMessage(Command command) {
 		this.out.println(command.toString());
 	}
-
+/* used to listen to commands from the server */
 	private void notifyListeners(Command command) {
 		for (ClientEventListener listener : listeners) {
 			listener.commandRecievedEvent(command);
 		}
 	}
-
+/* used to add a listner to the server */
 	public void addListener(ClientEventListener listener) {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
 	}
-
+/* used to remove listen from server */
 	public void removeListener(ClientEventListener listener) {
 		listeners.remove(listener);
 	}
-
+/*getter method for username*/
 	public String getUsername() {
 		return username;
 	}
-
+/*setter method for username*/
 	public void setUsername(String username) {
 		this.username = username;
 	}

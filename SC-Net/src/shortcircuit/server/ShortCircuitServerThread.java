@@ -23,6 +23,9 @@ public class ShortCircuitServerThread extends Thread {
 		this.socket = socket;
 	}
 
+/* This method is used to create new client threads. 
+ * It then allows them to signup or login and then join rooms and speak as well as begin games.
+ * The client threads are terminated if the client selects disconnect from the chat GUI */
 	public void run() {
 		this.isRunning = true;
 		System.out.println("New client thread started");
@@ -84,11 +87,11 @@ public class ShortCircuitServerThread extends Thread {
 			e.printStackTrace();
 		}
 	}
-
+/* used to send a command */
 	public void sendMessage(Command command) {
 		out.println(command.toString());
 	}
-
+/* method used to generate the list of rooms itself */
 	public String generateRoomList() {
 		StringBuilder builder = new StringBuilder();
 		Object[] keys = ShortCircuitServer.getRoomList().keySet().toArray();
@@ -102,7 +105,7 @@ public class ShortCircuitServerThread extends Thread {
 		}
 		return builder.toString();
 	}
-
+/* method used to generate the list of a room's members, returns the room builder */
 	public String generateMembersList() {
 		StringBuilder builder = new StringBuilder();
 		Object[] keys = this.room.getMemberList().keySet().toArray();
@@ -115,15 +118,15 @@ public class ShortCircuitServerThread extends Thread {
 		}
 		return builder.toString();
 	}
-
+/* getter method for room */
 	public Room getRoom() {
 		return room;
 	}
-
+/* setter method for room */
 	public void setRoom(Room room) {
 		this.room = room;
 	}
-
+/* stop running method for game */
 	public void stopRunning() {
 		this.isRunning = false;
 	}

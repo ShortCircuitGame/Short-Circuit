@@ -15,23 +15,27 @@ public class Client {
 	this.thread = thread;
 	this.username = username;
     }
-
+/* sends message to the clients */
     public void sendCommand(Command command) {
 	this.thread.sendMessage(command);
     }
-
+/* returns the thread for the server */
     public ShortCircuitServerThread getThread() {
 	return thread;
     }
-
+/* getter method for username */
     public String getUsername() {
 	return username;
     }
-
+/* setter method for user name */
     public void setUsername(String username) {
 	this.username = username;
     }
 
+/* Method used to execute all commands including chat, creating a chatroom/gameroom, joining a chatroom,
+ * leaving a room, disconnecting from the client, starting the game, stopping the game, as well as all
+ * of the in game commands (move up,down,left,right, ranged attack and melee attack).  Also recieves
+ * who has won the game itself.   */ 
     public void executeCommand(Command command) {
 
 	switch (command.command) {
@@ -148,19 +152,19 @@ public class Client {
 	    break;
 	}
     }
-
+/* getter method for id */
     public int getId() {
 	return this.id;
     }
-    
+/*setter method for id */    
     public void setId(int id){
 	this.id = id;
     }
-
+/* getter method for player */
     public Player getPlayer() {
 	return player;
     }
-
+/* setter method for player */
     public void setPlayer(Player player) {
 	this.player = player;
     }

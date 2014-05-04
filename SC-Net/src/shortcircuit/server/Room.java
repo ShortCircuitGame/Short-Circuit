@@ -16,28 +16,29 @@ public class Room {
     private String roomName;
     private Game game;
 
+ /* room constructor for users who are not the admin */
     public Room(String roomName) {
 	this.members = new Hashtable<String, Client>();
 	this.roomName = roomName;
     }
-
+/* room constructor for the admin of a room */ 
     public Room(String roomName, Client admin) {
 	this(roomName);
 	this.admin = admin;
     }
-
+/* method to add users to a room */
     public void addMember(Client client) {
 	this.members.put(client.getUsername(), client);
     }
-
+/* method to get members of a room */
     public Client getMember(String key) {
 	return this.members.get(key);
     }
-
+/* method to remove a member from a room */
     public void removeMember(Client client) {
 	this.members.remove(client.getUsername());
     }
-
+/* method to broadcast a chat */
     public void broadcastCommand(Command command) {
 	broadcastCommand(command, null);
     }
@@ -53,11 +54,11 @@ public class Room {
     public Hashtable<String, Client> getMemberList() {
 	return this.members;
     }
-
+/* getter method for room name */
     public String getRoomName() {
 	return roomName;
     }
-
+/* getter method for the admin */
     public Client getAdmin() {
 	return admin;
     }
@@ -65,7 +66,7 @@ public class Room {
     public boolean isEmpty() {
 	return (this.members.size() == 0);
     }
-
+/* method to start the game */
     public boolean startGame(Client client) {
 	if (client == admin) {
 	    this.game = new Game();
@@ -75,7 +76,7 @@ public class Room {
 	    return false;
 	}
     }
-
+/* method to set the sprite and id of each player */
     public void setIds() {
 	int i = 0;
 	ArrayList<Player> players = new ArrayList<Player>();
@@ -91,7 +92,7 @@ public class Room {
 	}
 	this.game.setPlayers(players);
     }
-
+/* method used to run through the game itself */
     public void runCommand(int id, CommandType command) {
 	if (this.game != null) {
 	    int result = this.game.execute(id, command);
@@ -104,15 +105,15 @@ public class Room {
 	    }
 	}
     }
-
+/* notification method for whose turn it is */
     public void notifyTurn(int id) {
 	clients.get(id).sendCommand(new Command(CommandType.TURN));
     }
-
+/* getter method for game */
     public Game getGame() {
 	return this.game;
     }
-
+/* method to stop the game */
     public void stopGame() {
 	this.game = null;
     }
