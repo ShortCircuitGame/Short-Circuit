@@ -22,7 +22,7 @@ public class ShortCircuitClient extends Thread {
 		this.sim = new Simulator(0, 0, null);
 		this.listeners = new ArrayList<ClientEventListener>();
 		
-		serverAddress = "localhost";
+		serverAddress = hostname;
 	}
 /* used to setup connection with host 
 * (initially set to localhost, can be changed in config while running server) */
