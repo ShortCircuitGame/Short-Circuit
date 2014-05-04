@@ -168,4 +168,9 @@ public class Client {
     public void setPlayer(Player player) {
 	this.player = player;
     }
+    
+    public void killPlayer(){
+	    this.thread.getRoom().getGame().killPlayer(id);
+    }
+
 }

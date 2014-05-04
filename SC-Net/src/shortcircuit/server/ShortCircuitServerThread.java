@@ -77,10 +77,11 @@ public class ShortCircuitServerThread extends Thread {
 						"Authentication information not provided"));
 			}
 			System.out.println("Client thread stopping");
-			this.getRoom().removeMember(this.client);
+			this.client.killPlayer();
 			this.getRoom().broadcastCommand(new Command(CommandType.DISCONNECT, this.client.getUsername()));
+			this.getRoom().removeMember(this.client);
 			ShortCircuitServer.removeRoom(this.getRoom().getRoomName());
-			ShortCircuitServer.getGetLobby().broadcastCommand(new Command(Command.CommandType.ROOMDESTROY, this.getRoom().getRoomName()));
+			//ShortCircuitServer.getGetLobby().broadcastCommand(new Command(Command.CommandType.ROOMDESTROY, this.getRoom().getRoomName()));
 			socket.close();
 			this.out.close();
 		} catch (IOException e) {

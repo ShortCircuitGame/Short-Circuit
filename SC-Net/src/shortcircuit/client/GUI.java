@@ -75,6 +75,7 @@ public class GUI extends JFrame implements ClientEventListener {
 			public void actionPerformed(ActionEvent arg0) {
 				client.sendMessage(new Command(Command.CommandType.DISCONNECT));
 				dispose();
+				window.dispose();
 			}
 		});
 		mnProgram.add(mntmDisconnect);
@@ -273,7 +274,22 @@ public class GUI extends JFrame implements ClientEventListener {
 				    	if(client.getUsername().equals(command.message)){
 				    	    dispose();
 				    	}else{
+				    		int index = userModel.indexOf(command.message);
 				    	    userModel.removeElement(command.message);
+					    	if(index != -1){
+						    	window.getGame().killPlayer(index);
+						    	ArrayList<Player> players = window.getGame().getPlayers();
+						    	for (int i=0; i < players.size(); i++){
+									if(players.get(i).health <= 0){
+										players.get(i).alive = false;
+									}
+								}
+							    window.repaint();
+	
+							    if(window.getGame().getWinner() != -1){
+							    	window.dispose();
+							    }
+					    	}
 				    	}
 					break;
 				case ROOMDESTROY:

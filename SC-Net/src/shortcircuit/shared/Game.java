@@ -11,7 +11,7 @@ public class Game {
     /* Parameters for the game */
     public static final int WIDTH = 15;
     public static final int HEIGHT = 15;
-    public static final int MAX_PLAYERS = 2;
+    public static final int MAX_PLAYERS = 3;
 
     public static final String COMA = ",";
     public int seed;
@@ -140,5 +140,18 @@ public class Game {
 	    builder.append(players.get(i).name + COMA);
 	}
 	return builder.toString();
+    }
+    
+    public boolean killPlayer(int index){
+		this.players.get(index).alive = false;
+		this.players.get(index).stamina = 0;
+
+    	if(currentTurn == index){
+    		execute(currentTurn, CommandType.NONE);
+    		return true;
+    	}else{
+    		return false;
+    	}
+    	
     }
 }

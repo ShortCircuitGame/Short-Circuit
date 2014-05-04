@@ -12,7 +12,7 @@ public class Player {
     private int id;
     private int direction;
     public String name;
-    private int stamina = MAX_STAMINA;
+    public  int stamina = MAX_STAMINA;
     public int health = MAX_HEALTH;
     public boolean alive = true;
     
